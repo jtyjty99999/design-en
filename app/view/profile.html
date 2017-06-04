@@ -1,0 +1,1181 @@
+{% extends "_layout.html" %}
+
+{% block body %}
+<!-- Main Content -->
+<div class="container">
+
+        <div class="menu_project">
+             <ul>
+                <li><a href="">资料</a></li>
+                <li class="manage-tab"><a href="">管理</a></li>
+                <li><a href="">订单</a></li>
+             </ul>
+         </div>
+
+    <div class="project-card">
+
+        <style>
+            .project-card .profile-head{
+                width:105px;
+                height:105px
+            }
+            .project-card .profile-box{
+                margin-top: 70px;
+            }
+            .profile-head-box{
+                text-align: center;
+                height: 500px;
+                border-right: 3px solid #d1cdc4
+            }
+            .profile-head-box img{
+                margin-bottom: 10px
+            }
+            .profile-action{
+                font-size:12px;
+                color: #d1cdc4
+            }
+            .profile-info-box{
+                margin-left: 82px;
+            }
+            .profile-title{
+                font-size: 14px;
+                    margin-left: 14px;
+                    margin-bottom: 32px
+            }
+            .profile-input .input-group{
+                border: 1px solid black;
+            }
+            .project-card .profile-input{
+                margin-bottom: 20px
+            }
+            .profile-input .input-group-addon{
+                background: white;
+                    border: none;
+                    border-radius: initial;
+                    font-size: 12px
+            }
+            .profile-input input{
+                    border: none;
+                    box-shadow: none;
+                    border-radius: initial
+            }
+            .profile-input input:focus{
+                    border: none;
+                    box-shadow: none
+            }
+            .profile-input #confirm-modify{
+                width: 140px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 12px;
+                padding: 0px;
+                background: black;
+                color: white;
+                font-weight: normal;
+            }
+            .profile-input .profile-action{
+                margin-top: 9px;
+                margin-left: -36px;
+            }
+
+        .address-list div{
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 14px;
+                margin-bottom: 20px;
+        }
+        .address-list .address-list-detail{
+
+            border: 1px solid #d1cdc4;
+            width: 600px;
+            padding: 6px;
+            margin-left: 17px;
+        }
+        .address-list-status{
+
+            position: relative;
+            border: 1px solid black;
+            width: 16px;
+            height: 16px;
+            border-radius: 20px;
+        }
+        .address-list-status:before{
+            position: relative;
+            /* border: 1px solid red; */
+            width: 12px;
+            height: 12px;
+            border-radius: 20px;
+            display: block;
+            content: '';
+            top: 1px;
+            left: 1px;
+        }
+        .address-list-status.status-current:before{
+            background: black;
+        }
+        .layui-layer{
+            background: white
+        }
+
+            .profile-manage-box .input-group-addon.address-current-select:before{
+                background: black
+            }
+            .profile-manage-title{
+                text-align: right;
+                font-size: 14px;
+                font-weight: normal;
+                margin-top: 63px;
+            }
+            .profile-manage-title-box{
+                border-right: 3px solid #d1cdc4;
+                height:300px
+            }
+        </style>
+
+        <div class="row profile-box">
+            <div class="col-md-3 profile-head-box">
+                <img data-src="/project/info?id={{project.id}}" class="profile-head" alt="140x140" src="{{user.pic}}" data-holder-rendered="true">
+                <div class="profile-action">修改头像</div>
+            </div>
+            <div class="col-md-8 profile-info-box">
+                <h4 class="profile-title">资料信息</h4>
+                <div class="row profile-input">
+                    <div class="col-xs-5">
+                        <div class="input-group">
+                            <div class="input-group-addon">昵称</div>
+                            <input type="text" class="form-control" id="nick" value="{{user.nick}}" placeholder="" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="input-group">
+                            <div class="input-group-addon">手机</div>
+                            <input type="text" class="form-control" id="phone" value="{{user.phone}}" placeholder="" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="row profile-input">
+                    <div class="col-xs-12">
+                        <div class="input-group">
+                            <div class="input-group-addon">邮箱</div>
+                            <input type="email" class="form-control" id="email" value="{{user.email}}" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="row profile-input">
+                    <input type="hidden" value="{{ ctx.csrf | safe }}" id="_csrf">
+                    <div class="col-xs-3">
+                        <button id="confirm-modify" type="button" class="btn btn-default">确认修改</button>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="profile-action">修改密码 &gt&gt</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="project-card">
+
+        <div class="row profile-box profile-manage-box">
+            <div class="col-md-3 profile-manage-title-box">
+                <h4 class="profile-manage-title">常用收货信息</h4>
+            </div>
+            <div class="col-md-8">
+                <ul class="address-list">
+                        {% for address in addresses %}
+                            <li data-id="{{address.id}}">
+                                {% if address.id == user.default_address_id %}
+                              <div class="address-list-status status-current"></div>
+                              {% else %}
+                                                            <div class="address-list-status"></div>
+                                {% endif %}
+
+  
+                                <div class="address-list-detail">{{address.country}}{{address.address}}</div>
+                                <div class="address-modify">编辑{{user.default_address_id}}</div>
+                                <div class="address-delete">删除</div>
+                            </li>
+                        {% endfor %}
+                </ul>
+                {% if addressnotfull %}<div class="profile-action" id="address-add">添加地址 &gt&gt</div> {% endif %}
+            </div>
+        </div>
+
+    </div>
+    <style>
+        .menu_project .manage-tab{
+            width:260px;
+        }
+        .project-card>.bill-container{
+                width: 1120px;
+                margin: auto;
+                border-color: #cecbbf;
+                border-top-style: solid;
+                border-top-width: 21px;
+                color:#717171;
+                height: 235px;
+                margin-top:28px
+        }
+        .bill-info-box{
+
+        }
+        .bill-info{
+                   height: 214px;
+                overflow: auto;
+        }
+        .bill-info>.row{
+            padding: 5px 0;
+            margin-top: 20px;
+            background-color:#cecbbf;
+        }
+        .bill-info img{
+            width:92px;
+            height:70px
+        }
+        .bill-info-text-box{
+
+        }        
+
+        .bill-info-text-box h4{
+            margin: 0;
+            font-size: 14px;
+        }  
+        .bill-info-text-box p{
+            margin: 0;
+            font-size: 12px;
+            transform: scale(0.8);
+            margin-left: -18px;
+        }     
+        .bill-info-text-box hr{
+            margin: 0px;
+            margin-bottom: 5px;
+        }    
+        .bill-info-text-table{
+            font-size: 9px;
+            transform: scale(0.8);
+            margin-left: -18px;
+            line-height: 10px;
+        }
+        .bill-info-text-table div:first-child{
+            display: inline-block;
+            padding: 0px;
+            text-align: left;
+            margin-left: -20px;
+            margin-right: 46px;
+        }
+        .bill-info-text-table div:last-child{
+            display: inline-block;
+            padding: 0px;
+            text-align: right;
+            width: 50px;
+        }
+        .bill-status-text{
+                height: 80px;
+                font-size: 12px;
+        }
+        .bill-price{
+            text-align: center;
+            margin-top: 90px; 
+        } 
+        .bill-status-text hr{margin: 0}
+        .bill-status{
+            text-align: center
+        }
+        .bill-status-box{
+                margin-top: 90px;
+        }
+        .bill-status-table-text{
+                padding-top: 22px;
+                text-align: center;
+                font-size: 12px;
+                position: absolute;
+                top: 0px;
+                width: 24px;
+                left: -5px;
+        }
+        .bill-status-table-text hr{
+                margin:0;
+                width: 50px;
+                margin-left: 100px;
+        }
+        .bill-status-box li.bill-sep{
+            width: 40px;
+                height: 1px;
+                background: black;
+        }
+        .bill-status-box li{
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .bill-status-box li.bill-status-li{
+
+            position: relative;
+            border: 1px solid black;
+            width: 16px;
+            height: 16px;
+            border-radius: 20px;
+        }
+        .bill-status-box li.bill-status-li:before{
+            position: relative;
+            /* border: 1px solid red; */
+            width: 12px;
+            height: 12px;
+            border-radius: 20px;
+            display: block;
+            content: '';
+            top: 1px;
+            left: 1px;
+        }
+        .bill-status-box li.status-current:before{
+            background: black;
+        }
+        .bill-info-title{
+            font-size: 12px;
+            text-align: center;
+            margin:0px;
+            margin-top:-20px;
+        }
+        #address-box{
+            padding: 30px 72px;
+            overflow: hidden
+        }
+        #address-box .profile-title{
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        #address-box .profile-input{
+            font-size: 14px;
+            margin-bottom:14px;
+        }
+        #confirm-address{
+                width: 140px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 12px;
+                padding: 0px;
+                background: black;
+                color: white;
+                font-weight: normal;
+        }
+
+
+
+/*avatar upload module*/
+.avatar-upload__shell {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+/*module wrapper*/
+.avatar-upload__wrapper {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+}
+
+/*input element positioned over module, transparent*/
+.avatar-upload__wrapper input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	opacity: 0;
+}
+
+/*wraps the "real" image. width is increased during upload progress*/
+.avatar-upload__image-wrapper {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	width: 0%;
+}
+
+/*general image positioning*/
+.avatar-upload__wrapper img {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+/*"real" image width auto so it doesn't resize as wrapper width increases on progress*/
+.avatar-upload__image-wrapper img {
+	width: auto;
+}
+
+/*progress text is vertically aligned in the middle*/
+.avatar-upload__progress-wrapper {
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+	z-index: 1;
+	width: 100%;
+	text-align: center;
+	font-size: 2.2em;
+	color: white;
+	text-shadow: 1px 1px rgba(0,0,0,.7);
+}
+
+/*the "faded" image appears in the background of the upload, becoming covered by real image*/
+.avatar-upload__faded-image {
+	opacity: .3;
+}
+
+/*when no upload is in progress, the "real" image should be fully visible*/
+.avatar-upload--complete .avatar-upload__image-wrapper {
+	width: 100%;
+}
+
+/*when no upload is in progress, progress is hidden*/
+.avatar-upload--complete .avatar-upload__progress-wrapper {
+	display: none;
+}
+
+/*when no upload is in progress, the "faded" image is hidden*/
+.avatar-upload--complete .avatar-upload__faded-image {
+	display: none;
+}
+
+.profile-head-box-inner {
+    width: 200px;
+    height: 200px;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    position:absolute;
+}
+
+.profile-head-box-inner img {
+    max-width: 200px;
+    max-height: 200px;
+}
+.profile-action-confirm{
+    width:150px;
+    height:30px;
+    background: black;
+    color:white;
+    margin-top: 115%;
+    font-size: 14px;
+    position:absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height: 30px;
+    cursor: pointer
+}
+
+    </style>
+    <div class="project-card">
+        {% for bill in bills %}
+        <div class="row bill-container profile-box">
+            <div class="col-md-4">
+                <p class="bill-info-title">{{bill.create_time}} 订单号: {{bill.id}}</p>
+                <div class="bill-info-box">
+
+                    <div class="bill-info">
+                        {% for good in bill.info %}
+                        <div class="row">
+                            <div class="col-md-6"> <img class="img" alt="140x140" src="{{good.m_pic}}"></div>
+                            <div class="col-md-6 bill-info-text-box">
+                                <h4>{{good.title}}</h4>
+                                <p>{{good.subtitle}}</p>
+                                <hr>
+                                <div class="row bill-info-text-table">
+                                    <div class="col-md-6">PRICE</div><div class="col-md-6">{{good.price}}</div>
+                                </div>
+                                <div class="row bill-info-text-table">
+                                    <div class="col-md-6">MATERIAL</div><div class="col-md-6">{{good.metarial}}</div>
+                                </div>
+                                <div class="row bill-info-text-table">
+                                    <div class="col-md-6">QUANTITY</div><div class="col-md-6">{{good.quantity}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-md-3">
+                 <p class="bill-info-title">金额</p>
+                <div class="bill-status-text">
+                    <div class="bill-price">{{bill.total}}</div>
+                    <hr>
+                    <div class="bill-status">{% if bill.status===0 %}未支付 <button class="pay btn" data-billid="{{bill.id}}">去支付</button>{% endif %} 
+                    {% if bill.status ===1 %}已支付，等待发货{% endif %}
+                    {% if bill.status ===2 %}<span class="bill-shipping-code">已发货，快递单号： {{bill.shipping_code}} <button class="confirm-package btn" data-billid="{{bill.id}}">确认收货</button></span>{% endif %} </div>
+                    {% if bill.status ===3 %}<span class="bill-shipping-code">已收货，快递单号： {{bill.shipping_code}} </span>{% endif %} 
+                    </div>
+            </div>
+            <div class="col-md-5">
+                 <p class="bill-info-title">交易状态</p>
+                <ul class="bill-status-box">
+                    <li class="status-current bill-status-li"><span class="bill-status-table-text">下单</span></li>
+                    <li class="bill-sep"></li>
+                    <li class="{% if bill.status >0 %}status-current{% endif %}  bill-status-li"><span class="bill-status-table-text">支付</span></li>
+                    <li class="bill-sep"></li>
+                    <li class="{% if bill.status >1 %}status-current{% endif %} bill-status-li"><span class="bill-status-table-text">发货</span> </li>
+                    <li class="bill-sep"></li>
+                    <li class="{% if bill.status >2 %}status-current{% endif %} bill-status-li"><span class="bill-status-table-text">收货</span></li>
+                    <li class="bill-sep"></li>
+                    <li class="{% if bill.status >2 %}status-current{% endif %} bill-status-li"><span class="bill-status-table-text">完成</span></li>
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+   
+</div>
+{% endblock %}
+
+{% block script %}
+
+<script>
+
+    (function ( root, factory ) {
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD. Register as an anonymous module.
+		define(function () {
+			// Also create a global in case some scripts
+			// that are loaded still are looking for
+			// a global even when an AMD loader is in use.
+			return ( root.AvatarUpload = factory() );
+		});
+	} else {
+		// Browser globals
+		root.AvatarUpload = factory();
+	}
+}( this, function () {
+
+	var extend = function(original, extra) {
+		return Object.keys(extra).forEach(function(key) {
+			original[key] = extra[key];
+		});
+	};
+
+	var parseJson = function(input) {
+		try {
+			return JSON.parse(input);
+		}
+		catch (e) {
+			return false;
+		}
+	};
+
+	var AvatarUpload = function(config) {
+		extend(this.config, config);
+
+		if ( ! this.config.el) {
+			throw new Error('An element is required to manipulate');
+		}
+
+		if ( ! this.config.uploadUrl && ! this.config.pretendUpload) {
+			throw new Error('Upload URL not specified');
+		}
+
+		this.el = this.config.el;
+		this.renderInput();
+		this.bindInput();
+
+		this.progressText = this.el.querySelector('span');
+		this.imageWrapper = this.el.querySelector('.avatar-upload__image-wrapper');
+	};
+
+	AvatarUpload.prototype.config = {
+		el: undefined,
+
+		uploadUrl: '',
+		uploadMethod: 'post',
+		uploadImageKey: 'upload',
+		uploadData: {},
+
+		pretendUpload: false,
+
+		onProgress: undefined,
+		onSuccess: undefined,
+		onError: undefined
+	};
+
+	AvatarUpload.prototype.renderInput = function() {
+		var imgEl = this.el.querySelector('img'),
+			img = imgEl.src;
+
+		var el = document.createElement('div');
+		el.className = 'avatar-upload__shell';
+
+		el.innerHTML = [
+			'<div class="avatar-upload__wrapper avatar-upload--complete">',
+				'<div class="avatar-upload__image-wrapper">',
+					'<img src="'+img+'">',
+				'</div>',
+				'<img src="'+img+'" class="avatar-upload__faded-image">',
+				'<div class="avatar-upload__progress-wrapper">',
+					'<span>0%</span>',
+				'</div>',
+				'<input type="file">',
+			'</div>',
+		].join('');
+
+		imgEl.parentNode.removeChild(imgEl);
+		this.el.appendChild(el);
+
+		return this;
+	};
+
+	AvatarUpload.prototype.bindInput = function(event) {
+		this.el.querySelector('input').addEventListener(
+			'change', this.initiateUpload.bind(this), true
+		);
+	};
+
+	AvatarUpload.prototype.initiateUpload = function(event) {
+		var file = event.target.files[0];
+
+		// reset input to allow selecting same file again
+		event.target.value = null;
+
+		if ( ! file.type.match(/image.*/)) return;
+
+		// read file & run upload
+		var reader = new FileReader;
+		reader.onload = this.displayUpload.bind(this);
+		reader.readAsDataURL(file);
+
+		this.upload(file);
+	};
+
+	AvatarUpload.prototype.displayUpload = function(event) {
+		var img = event.target.result;
+
+		this.uiUploadStart(img);
+	};
+
+	AvatarUpload.prototype.upload = function(file) {
+		var Uploader = this.config.pretendUpload ? FakeUploader : XhrUploader;
+
+		Uploader(file, this.config, {
+			progress: this.uploadProgress.bind(this),
+			success: this.uploadSuccess.bind(this),
+			error: this.uploadError.bind(this),
+		});
+	};
+
+	AvatarUpload.prototype.uploadProgress = function(progress) {
+		this.uiUploadProgress(progress);
+		if (this.config.onProgress) this.config.onProgress(progress, this.el, this);
+	};
+
+	AvatarUpload.prototype.uploadSuccess = function(xhr, json) {
+		this.uiUploadSuccess(xhr, json);
+		if (this.config.onSuccess) this.config.onSuccess(xhr, json);
+	};
+
+	AvatarUpload.prototype.uploadError = function(xhr, json) {
+		this.uiUploadError(xhr, json);
+		if (this.config.onError) this.config.onError(xhr, json);
+	};
+
+	AvatarUpload.prototype.uiUploadStart = function(img) {
+		var origSrc;
+
+		Array.prototype.forEach.call(this.el.querySelectorAll('img'), function(imgEl) {
+			origSrc = imgEl.src;
+			imgEl.src = img;
+		});
+
+		this.origSrc = origSrc;
+
+		this.el.querySelector('.avatar-upload__wrapper').className = 'avatar-upload__wrapper'; // remove complete class
+	};
+
+	AvatarUpload.prototype.uiUploadProgress = function(progress) {
+		this.progressText.textContent = progress+'%';
+		this.imageWrapper.style.width = progress+'%';
+	};
+
+	AvatarUpload.prototype.uiUploadSuccess = function(xhr, json) {
+		this.progressText.textContent = '0%';
+		this.imageWrapper.style.width = null;
+		this.el.querySelector('.avatar-upload__wrapper').className = 'avatar-upload__wrapper avatar-upload--complete';
+	};
+
+	AvatarUpload.prototype.uiUploadError = function(xhr, json) {
+		this.uiUploadSuccess();
+
+		var origSrc = this.origSrc;
+		Array.prototype.forEach.call(this.el.querySelectorAll('img'), function(imgEl) {
+			imgEl.src = origSrc;
+		});
+	};
+
+	var FakeUploader = function(file, config, callbacks) {
+		var progress = 0;
+		var id = setInterval(function() {
+			progress += 1;
+			// if (progress == 50) {
+			// 	callbacks.error();
+			// 	return clearInterval(id);
+			// }
+			if (progress > 100) {
+				callbacks.success();
+				return clearInterval(id);
+			}
+			callbacks.progress(progress);
+		}, 50);
+	};
+
+	var XhrUploader = function(file, config, callbacks) {
+		var xhr = new XMLHttpRequest(),
+			formData = new FormData();
+
+		xhr.upload.addEventListener('progress', function(transfer) {
+			callbacks.progress(parseInt(
+				transfer.loaded / transfer.total * 100
+			, 10));
+		});
+
+		xhr.onreadystatechange = function(e) {
+			if (xhr.readyState !== 4) return;
+
+			if (xhr.status === 200) {
+				callbacks.success(xhr, parseJson(xhr.response));
+			}
+			else {
+				callbacks.error(xhr, parseJson(xhr.response));
+			}
+		};
+
+		formData.append(config.uploadImageKey, file);
+
+		for (val in config.uploadData) {
+			formData.append(val, config.uploadData[val]);
+		}
+
+		xhr.open(config.uploadMethod, config.uploadUrl);
+		xhr.send(formData);
+	};
+
+	return AvatarUpload;
+
+}));
+
+
+
+                var uploadContent = `<div class="profile-head-box">
+                    <h5>点击修改头像</h5>
+                    <div class="profile-head-box-inner"><img class="profile-head" alt="140x140" src="{{user.pic}}" data-holder-rendered="true"></div>
+                <div class="profile-action-confirm">确认修改</div>
+            </div>`
+
+                $(document).delegate('.profile-action','click',function(){
+                            layer.open({
+                                title: false,
+                                type: 1,
+                                shadeClose: true,
+                                closeBtn:1,
+                                shade: 0.8,
+                                area:['255px','379px'],
+                                content: uploadContent,
+                                success: function(layero, i){
+                                    var upload ='/upload?_csrf=' + $('body').attr('csrf');
+                                    new AvatarUpload({
+                                        el: document.querySelector('.profile-head-box-inner'),
+                                        uploadUrl: upload,
+                                        onSuccess:function(a){
+                                            console.log(a.responseText);
+                                            $('.profile-action-confirm').attr('data-src',a.responseText);
+                                        }
+                                    });
+                                },
+                                end: function(layero, i){
+                                }
+                            });                         
+
+
+                });
+
+                $(document).delegate('.profile-action-confirm','click',function(){
+                    $.ajax({
+                        url:'/user',
+                        type:'PUT', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            pic:$(this).attr('data-src'),
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.msg ==='wrong'){
+                                alert('修改失败');
+                            }else{
+                                alert('修改成功');
+                                location.reload();
+                            }
+                        }
+                    });
+                });
+
+                var addressContent = `<div id="address-box">
+                                <h3 class="profile-title">收件地址</h3>
+                                <div class="row profile-input">
+                                    <div class="col-xs-5">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">地区</div>
+                                            <select name="type" class="form-control" id="country" data-address="{{address.country}}">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row profile-input">
+                                    <div class="col-xs-7">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">详细地址</div>
+                                            <input type="text" class="form-control" id="address" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-5">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">邮编</div>
+                                            <input type="text" class="form-control" id="postcode" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <h3 class="profile-title">收件人信息</h3>
+                                <div class="row profile-input">
+                                    <div class="col-xs-5">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">姓名</div>
+                                            <input type="text" class="form-control" id="contact_name" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-7">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">联系人电话</div>
+                                            <input type="text" class="form-control" id="contact_phone" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row profile-input">
+                                    <div class="col-xs-12">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">邮箱</div>
+                                            <input type="text" class="form-control" id="contact_email" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row profile-input">
+                                    <div class="col-xs-12">
+                                        <button class="btn" id="confirm-address">确认</button>
+                                    </div>
+                                </div>
+                        </div>`
+	$(function(){
+			var $li = $('.menu_project li');
+			var $ul = $('.project-card');
+						
+			$li.mouseover(function(){
+				var $this = $(this);
+				var $t = $this.index();
+				$li.removeClass('current');
+				$this.addClass('current');
+				$ul.css('display','none');
+				$ul.eq($t).css('display','block');
+			})
+
+				$li.removeClass('current');
+				$li.eq(0).addClass('current');
+				$ul.css('display','none');
+				$ul.eq(0).css('display','block');
+
+	});
+
+                $(document).delegate('#confirm-modify','click',function(){
+                    $.ajax({
+                        url:'/user',
+                        type:'PUT', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            nick:$('#nick').val(),
+                            email:$('#email').val(),
+                            phone:$('#phone').val(),
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.msg ==='wrong'){
+                                alert('修改失败');
+                            }else{
+                                alert('修改成功');
+                            }
+                        }
+                    });
+                });
+
+
+var pro = ["北京","天津","上海","重庆","河北","山西","辽宁","吉林","黑龙江","江苏","浙江","安徽","福建","江西","山东","河南","湖北","湖南","广东","海南","四川","贵州","云南","陕西","甘肃","青海","内蒙古","广西","西藏","宁夏","新疆","香港","澳门","台湾"];
+
+                $(document).delegate('.address-list-status','click',function(){
+                    var self = this;
+                    $.ajax({
+                        url:'/address/modifydefaultaddress',
+                        type:'PUT', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            id:$(self).parent().attr('data-id'),
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.success ===false){
+                                alert('设置为默认地址失败');
+                            }else{
+                                 alert('设置为默认地址成功');
+                                 $('.address-list .address-list-status').each(function(d, i){
+                                    $(i).removeClass('status-current');
+                                 })
+                                 $(self).addClass('status-current');
+                            }
+                        }
+                    });
+                });
+
+                $(document).delegate('#confirm-address','click',function(){
+
+                    var type = $(this).attr('type');
+                    var method;
+                    if(type==='add'){
+                        method = 'POST';
+                        msgRight="添加成功";
+                        msgWrong= "添加失败";
+                    }else if(type==='modify'){
+                        method = 'PUT';
+                        msgRight="修改成功";
+                        msgWrong= "修改失败";
+                    }else{
+                        return;
+                    }
+                    $.ajax({
+                        url:'/address',
+                        type:method, //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            address:$('#address').val(),
+                            postcode:$('#postcode').val(),
+                            contact_name:$('#contact_name').val(),
+                            contact_email:$('#contact_email').val(),
+                            contact_phone:$('#contact_phone').val(),
+                            country:$('#country').val(),
+                            id:$(this).attr('data-addressid'),
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.msg ==='wrong'){
+                                alert(msgWrong);
+                            }else{
+                                alert(msgRight);
+                            }
+                            location.reload();
+                        }
+                    });
+                });
+
+                $(document).delegate('#address-add','click',function(){
+                            layer.open({
+                                title: false,
+                                type: 1,
+                                shadeClose: true,
+                                closeBtn:1,
+                                shade: 0.8,
+                                area:['819px','388px'],
+                                content: addressContent,
+                                success: function(layero, i){
+                                            $('#address').val('');
+                                            $('#postcode').val('');
+                                            $('#contact_name').val('');
+                                            $('#contact_email').val('');
+                                            $('#contact_phone').val('');
+                                            $('#country').val('');
+                                            $('#confirm-address').attr('type','add');
+                                            $('#confirm-address').attr('data-addressid','');
+
+                                            for(var i=0;i<pro.length;i++){
+                                                $option=$("<option/>")
+                                                $option.attr("value",pro[i]);
+                                                $option.text(pro[i]);
+                                                $("#country").append($option);
+                                            }
+                                },
+                                end: function(layero, i){
+                                }
+                            });                         
+
+
+                });
+
+                $(document).delegate('.address-delete','click',function(){
+
+                    $.ajax({
+                        url:'/address',
+                        type:'DELETE', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            id:$(this).parent().attr('data-id'),
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.success ===false){
+                                alert('删除失败');
+                            }else{
+                                 alert('删除成功');
+                                 location.reload();
+                            }
+                        }
+                    });
+                });
+
+                $(document).delegate('.address-modify','click',function(){
+
+                    $.ajax({
+                        url:'/address',
+                        type:'GET', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            id:$(this).parent().attr('data-id'),
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.success ===false){
+                                alert('请求地址信息失败');
+                            }else{
+                                layer.open({
+                                    title: false,
+                                    type: 1,
+                                    shadeClose: true,
+                                    closeBtn:1,
+                                    shade: 0.8,
+                                    area:['819px','388px'],
+                                    content: addressContent,
+                                    success: function(layero, i){
+                                        $('#address').val(data.address.address);
+                                        $('#postcode').val(data.address.postcode);
+                                        $('#contact_name').val(data.address.contact_name);
+                                        $('#contact_email').val(data.address.contact_email);
+                                        $('#contact_phone').val(data.address.contact_phone);
+                                        $('#confirm-address').attr('type','modify');
+                                        $('#confirm-address').attr('data-addressid',data.address.id);
+                                            for(var i=0;i<pro.length;i++){
+                                                $option=$("<option/>")
+                                                $option.attr("value",pro[i]);
+                                                $option.text(pro[i]);
+                                                $("#country").append($option);
+                                            }
+                                            $("#country").val(data.address.country);
+                                    },
+                                    end: function(layero, i){
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
+
+                $(document).delegate('.pay','click',function(){
+
+                    $.ajax({
+                        url:'/bill/pay',
+                        type:'GET', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            bill_id:$(this).attr('data-billid'),
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.success ===false){
+                                alert('支付失败');
+                            }else{
+                                location.href = data.surl;
+                            }
+                        }
+                    });
+                });
+
+                $(document).delegate('.confirm-package','click',function(){
+
+                    $.ajax({
+                        url:'/bill/confirm',
+                        type:'GET', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            bill_id:$(this).attr('data-billid'),
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.success ===false){
+                                alert('确认失败');
+                            }else{
+                                alert('确认成功');
+                            }
+                        }
+                    });
+                });
+
+
+
+
+</script>
+{% endblock %}

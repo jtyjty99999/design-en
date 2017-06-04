@@ -1,0 +1,189 @@
+{% extends "_layout.html" %}
+
+{% block body %}
+<!-- Main Content -->
+<div class="container">
+
+    <div class="row section fp-auto-height" id="goods-container">
+        <!--
+        <div class="col-md-12" id="goods-nav">
+
+            <div>
+                <a>{{good.type}}</a>&gt
+                <a>{{good.title}}</a>
+            </div>
+
+        </div>-->
+        <div class="col-md-6" style="text-align:center">
+            <div class="goods-pics">
+                        {% for in_pic in good.in_pic %}
+                        <img src="{{in_pic}}" alt=""> 
+                        {% endfor %}  
+            </div>
+
+                <ul class="goods-pics-pointer">
+                        {% for in_pic in good.in_pic %}
+                            <li></li>
+                        {% endfor %}
+                </ul>
+        </div>
+        <div class="col-md-6" id="good-info-block">
+            <h3>{{good.title}}</h3>
+            <h4>{{good.subtitle}}</h4>
+            <hr>
+            <p>{{good.description}}</p>
+            <div class="row good-input">
+                <div class="col-md-6">PRICE</div>
+                <div class="col-md-6 price-format">$ {{good.price}}</div>
+            </div>
+            <div class="row good-input">
+                <div class="col-md-6">MATERIAL</div>
+                <div class="col-md-6">
+                    <ul class="color-list">
+                        {% for color in good.color %}
+                        <li style="background:{{color}}" data-color="{{color}}"></li> 
+                        {% endfor %}                
+                    </ul>
+                </div>
+            </div>
+            <div class="row good-input">
+                <div class="col-md-6">QUANTITY</div>
+                <div class="col-md-6"><input  style="width:100px;" data_max="{{good.whole}}" value="0" data_step="1"  data_digit="0" id="quantity"/></div>
+            </div>
+            <div class="row good-input" id="add-cart-box">
+                <input type="hidden" value="{{ ctx.csrf | safe }}" id="_csrf">
+                <button id="add-to-cart" data-good="{{good.id}}">ADD TO CART</button>
+            </div>
+
+        </div>
+    </div>
+
+{{good.content | safe}}
+
+<p style="text-align:center"><span style="font-size:14px"><span style="font-family:Verdana,Geneva,sans-serif"><strong>PRIVACYPOLICY</strong></span></span></p>
+
+<p style="text-align:center"><span style="font-size:12px"><span style="font-family:Verdana,Geneva,sans-serif">This website (&quot;website&quot;) is run by www.de-front.com. This privacy policy only covers information collected on this site and does not&nbsp;<br />
+include anyinformation gathering.The website www.de-front.com is currently made by this privacy policy.</span></span><br />
+<u><span style="font-size:12px"><span style="font-family:Verdana,Geneva,sans-serif"><a href="/privacy">more</a></span></span></u></p>
+
+<p style="text-align:center">&nbsp;</p>
+
+<p style="text-align:center"><strong><span style="font-size:14px"><span style="font-family:Verdana,Geneva,sans-serif">RETURN AND EXCHANGE</span></span></strong></p>
+
+<p style="text-align:center"><span style="font-size:12px"><span style="font-family:Verdana,Geneva,sans-serif"><strong>What is your return policy? How many days do I have to return a product?</strong><br />
+For online purchases, DEFRONT will accept merchandise in its original condition for a refund of the purchase price when accompanied<br />
+by the original invoice.SinceDEFRONT provide various kinds of merchandise, each merchandise will have a different<br />
+<u><a href="/return">more</a></u></span></span></p>
+
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script src="/public/js/number-input.js"></script>
+
+<script>
+
+function isLogin(cb){
+                    $.ajax({
+                        url:'/user/islogin',
+                        type:'GET', //GET
+                        async:false,    //或false,是否异步
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            cb(data);
+                        }
+                    });
+                }
+
+    $('.goods-pics-pointer li').eq(0).addClass('hover')
+
+	$(function(){
+			var $li = $('.goods-pics-pointer li');
+			var $pics = $('.goods-pics img');
+						
+			$li.mouseover(function(){
+				var $this = $(this);
+				var $t = $this.index();
+				$pics.css('display','none');
+			    $pics.eq($t).css('display','block');
+                $this.addClass('hover').siblings().removeClass('hover')
+			})
+
+				$pics.css('display','none');
+				$pics.eq(0).css('display','block');
+
+                $('.color-list li').on('click',function(){
+                    $(this).siblings().removeClass('select-current');
+                    $(this).addClass('select-current');
+                })
+
+                $(document).delegate('#add-to-cart','click',function(){
+                    
+                    isLogin(function(data){
+                        if(data.login === false){
+                             layer.open({
+                                title: false,
+                                type: 1,
+                                shadeClose: true,
+                                closeBtn:1,
+                                shade: 0.8,
+                                area:['353px','379px'],
+                                content: loginContent,
+                                success: function(layero, i){
+                                    // console.log(index);
+                                },
+                                end: function(layero, i){
+                                }
+                            }); 
+                        }else{
+
+                    var quantity = $('#quantity').val();
+                    var material = $('.color-list li.select-current').attr('data-color');
+                    if(quantity === '0'){
+                        alert('请选择数量');
+                        return
+                    }
+                    if(material === undefined){
+                        alert('请选择颜色');
+                        return 
+                    }
+                    $.ajax({
+                        url:'/cart',
+                        type:'POST', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            goods_id:$('#add-to-cart').attr('data-good'),
+                            quantity:quantity,
+                            material:material,
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.success ===false){
+                                alert('添加失败,请登录');
+                            }else{
+                                alert('添加成功');
+                            }
+                        }
+                    });
+
+                        }
+                    });
+                });
+	});
+</script>
+{% endblock %}
+

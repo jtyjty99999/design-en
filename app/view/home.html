@@ -1,0 +1,69 @@
+{% extends "_layout.html" %}
+
+{% block header %}
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<link rel="stylesheet" type="text/css" href="/public/css/jquery.fullPage.css" />
+{% endblock %}
+
+{% block body %}
+<!-- Main Content -->
+<div class="container" id="fullpage">
+    <div class="row section fp-auto-height">
+        <div class="col-md-12"><img src="/public/images/big/1.jpg" class="img-responsive" alt="Responsive image"></div>
+    </div>
+    <div class="row section fp-auto-height">
+        <div class="col-md-12"><img src="/public/images/big/3.jpg" class="img-responsive" alt="Responsive image"></div>
+    </div>
+    <div class="row section fp-auto-height project">
+            {% for project in projects %}
+            <div class="col-md-6" style="padding: 0px;">
+                <img class="img" alt="140x140" src="{{project.m_pic}}" data-s="/project/info?id={{project.id}}">
+            </div>
+            {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="/public/js/plugins/jquery.fullPage.min.js"></script>
+
+<script>
+    var per = 850/490;
+    var bigper = 2;
+    var ins;
+
+    if($(window).width()/$(window).height()>bigper){
+
+    }else{
+
+        if($(window).width()/$(window).height()<per){
+
+        }else{
+            $('#fullpage').fullpage();
+            ins = true;
+        }
+
+    }
+
+
+    $(window).on('resize',function(){
+
+        if($(window).width()/$(window).height()<per){
+             // $.fn.fullpage.destroy('all');
+        }else{
+            if(!ins){
+                 $('#fullpage').fullpage();
+                ins = true;
+            }
+        }
+    })
+
+    $(document).delegate('.project img','click',function(){
+                    var url = $(this).attr('data-s');
+                    index = $(this).parent().index();
+                    location.href = url;
+                })
+
+</script>
+{% endblock %}

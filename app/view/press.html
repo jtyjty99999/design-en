@@ -1,0 +1,95 @@
+{% extends "_layout.html" %}
+
+{% block body %}
+<!-- Main Content -->
+<div class="container press-container">
+    
+        <div class="row press-pic-list">
+
+            {% for press in articles %}
+            <div class="col-md-3">
+                <img class="press-pic" style="cursor:pointer" src="{{press.m_pic}}" data-big = "{{press.in_pic}}">
+                <div class="press-info">
+                    {{press.title}}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+</div>
+<div class="control-btn">
+
+    <div id="prev"></div>
+    <div id="next"></div>
+
+</div>
+{% endblock %}
+
+
+{% block script %}
+
+<script type="text/javascript" src="/public/js/plugins/layer.js"></script>
+
+<script>
+
+var index;
+
+$(document).delegate('.press-pic','click',function(){
+    var in_png = $(this).attr('data-big');
+    index = $(this).parent().index();
+    layer.open({
+            title: false,
+            type: 1,
+            shadeClose: true,
+            closeBtn:1,
+            shade: 0.8,
+            area:['80%','90%'],
+            content: '<div id="press-container"><img class="press-pic-big" src="'+in_png+'"></div>',
+            success: function(layero, i){
+                // console.log(index);
+                $('.control-btn').show();
+                console.log($('#press-container').parents('div').parents('.layui-layer'));
+                $('#press-container').parents('div').parents('.layui-layer').css({
+                    "background":"none",
+                    "box-shadow":"initial"
+                })
+
+            },
+            end: function(layero, i){
+                $('.control-btn').hide();
+            }
+        }); 
+
+})
+
+
+$(document).delegate('#next','click',function(){
+
+    var max = $('.col-md-3').length;
+    
+    if(index == max-1){
+        index = 0;
+    }else{
+        index+=1;
+    }
+    console.log($('.col-md-3').eq(index).find('img').attr('data-big'));
+    $('.press-pic-big').attr('src',$('.col-md-3').eq(index).find('img').attr('data-big'));
+    return false 
+})
+
+
+$(document).delegate('#prev','click',function(){
+
+    var max = $('.col-md-3').length;
+    
+    if(index == 0){
+        index = max-1;
+    }else{
+        index-=1;
+    }
+
+    $('.press-pic-big').attr('src',$('.col-md-3').eq(index).find('img').attr('data-big'));
+    return false 
+})
+
+</script>
+{% endblock %}

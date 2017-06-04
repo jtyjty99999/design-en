@@ -1,0 +1,359 @@
+{% extends "_layout.html" %}
+
+{% block body %}
+<!-- Main Content -->
+
+<style>
+    #cart-container{
+        margin-top: 80px;
+    }
+    #cart-container #goods-container{
+        width:820px;
+        background: #d1cdc4;
+        height: 200px;
+        margin-top: 14px;
+    }
+    #cart-container .goods-pics{
+        width:auto;
+        height:auto;
+    }
+    #cart-container .goods-pics img{
+        width:240px;
+        height:160px;
+            margin-top: 20px;
+    margin-left: 32px;
+    }
+    #cart-container #good-info-block{
+        width: 50%;
+        padding: 28px 38px;
+        height: 200px;
+        margin-left: 58px;
+        position:relative
+    }
+    #cart-container #good-info-block hr{
+        margin-top: 27px
+    }
+    #cart-container #good-info-block p{
+        height:auto
+    }
+   #cart-container .good-input{
+        margin-top: 0px;
+            font-size: 14px;
+   }
+   #cart-container .price-format{
+       text-align:right;
+       font-size: 14px
+   }
+   #cart-container .good-input{
+   }
+   #cart-container .color-list{
+       margin-bottom: 0px;
+       height:16px
+   }
+   #cart-container .color-list li{
+       width:16px;
+       height:16px
+   }
+    #cart-container .good-input .col-md-6:nth-child(2) {
+    text-align: right;
+    }
+    .cart-box{
+        width: 820px;
+    margin: auto;
+    padding: 20px 70px;
+    border: 2px solid #D1CDBD;
+    margin-top: 20px;
+    font-family: "Microsoft Yahei";
+    margin-bottom: -8px;
+    }
+    .cart-box h4{
+        text-align: center;
+        font-weight: normal;
+        margin-bottom:30px;
+
+    }
+    .cart-box hr{
+          margin-top: 8px;
+        margin-bottom: 26px;
+    }
+    .cart-box .form-control{
+        margin-bottom: 23px;
+        height: 30px;
+        border-radius:initial
+    }
+    #place-box{
+            width: 820px;
+    margin: auto;
+    text-align: center;
+    margin-top: 40px;
+    }
+    #place-order{
+        width: 460px;
+        height: 58px;
+        font-size: 28px;
+        color: white;
+        background: black;
+        line-height: 58px;
+        font-weight: normal;
+            padding: 0;
+    }
+    .shop-close{
+        position: absolute;
+        right:0;
+        top:0;
+        color:black;
+        cursor: pointer
+    }
+</style>
+<div class="container" id="cart-container">
+    {% if goods.length !==0 %}
+
+    {% for good in goods %}
+    <div class="row section fp-auto-height" id="goods-container">
+        <div class="col-md-5">
+            <div class="goods-pics">
+                <img src="{{good.m_pic}}" alt=""> 
+            </div>
+        </div>
+        <div class="col-md-7" id="good-info-block">
+            <div class="shop-close" id="{{good.id}}">&times;</div>
+            <h3>{{good.title}}</h3>
+            <h4>{{good.subtitle}}</h4>
+            <hr>
+            <div class="row good-input">
+                <div class="col-md-6">Price</div>
+                <div class="col-md-6 price-format">$ {{good.price}}</div>
+            </div>
+            <div class="row good-input">
+                <div class="col-md-6">MATERIAL</div>
+                <div class="col-md-6">
+                    <ul class="color-list">
+                        <li style="background:{{good.material}}"></li>       
+                    </ul>
+                </div>
+            </div>
+            <div class="row good-input">
+                <div class="col-md-6">QUANTITY</div>
+                <div class="col-md-6">{{good.quantity}}</div>
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}  
+
+    <div class="cart-box">
+        <h4>SHIPPING ADDRESS</h4>
+        <div class="row">
+            <div class="col-lg-5">
+                    <select name="type" class="form-control" id="country" data-address="{{address.country}}">
+                    </select>
+            </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+        <div class="row">
+            <div class="col-lg-8">
+                <input type="text" class="form-control" aria-label="..." value="{{address.address}}" id="address" placeholder="COUNTRY">
+            </div><!-- /.col-lg-6 -->
+            <div class="col-lg-4">
+                <input type="text" class="form-control" aria-label="..." value="{{address.postcode}}" id="postcode" placeholder="POSTCODE">
+            </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+        <hr>
+        <h4>CUSTOMER INFORMATION</h4>
+        <div class="row">
+            <div class="col-lg-4">
+                <input type="text" class="form-control" aria-label="..." value="{{address.contact_name}}" id="name" placeholder="NAME">
+            </div><!-- /.col-lg-6 -->
+            <div class="col-lg-8">
+                <input type="text" class="form-control" aria-label="..." value="{{address.contact_phone}}" id="phone" placeholder="PHONE">
+            </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <input type="text" class="form-control" aria-label="..." value="{{address.contact_email}}" id="email" placeholder="EMAIL">
+            </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+    </div>
+    <div class="cart-box">
+        <h4>TOTAL</h4>
+        <ul class="price-list">
+            <li>价格：<span id="price">{{total}}</span></li>
+            <li>运费：<span id="delivery"></span></li>
+            <li>总计：<span id="total"></span></li>            
+        </ul>
+    </div>
+
+    <div class="cart-box">
+        <h4>PAYMENT</h4>
+        <ul class="pay-type-list">
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <input type="hidden" value="{{ ctx.csrf | safe }}" id="_csrf">
+                
+    <div id="place-box">
+        <button class="btn" id="place-order" disabled>place order</button>
+    </div>
+
+    {% else%}
+
+    <div class="cart-box" data-cart="none">
+        <h4>YOUR CART IS EMPTY</h4>
+    </div>
+
+    {% endif%}
+
+    
+
+</div>
+{% endblock %}
+
+{% block script %}
+
+<script>
+
+if($(".cart-box").attr('data-cart')!=='none'){
+
+
+var pro = ["北京","天津","上海","重庆","河北","山西","辽宁","吉林","黑龙江","江苏","浙江","安徽","福建","江西","山东","河南","湖北","湖南","广东","海南","四川","贵州","云南","陕西","甘肃","青海","内蒙古","广西","西藏","宁夏","新疆","香港","澳门","台湾"];
+
+for(var i=0;i<pro.length;i++){
+    $option=$("<option/>")
+    $option.attr("value",pro[i]);
+    $option.text(pro[i]);
+    $("#country").append($option);
+}
+
+$("#country").val($("#country").attr('data-address'));
+
+	$(function(){
+
+        function getDelivery(cb){
+
+                    $.ajax({
+                        url:'/countDelivery',
+                        type:'POST', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            address:$('#country').val(),
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            cb(data);
+                        }
+                    });
+
+        }
+        getDelivery(function(data){
+            $('#delivery').text(data.total);
+            $('#total').text(Number($('#price').text()) + Number($('#delivery').text()));
+            $('#place-order').prop('disabled',false);
+        })
+
+        $('#country').on('change',function(){
+            $('#place-order').prop('disabled',true);
+            getDelivery(function(data){
+                $('#delivery').text(data.total);
+                $('#total').text(Number($('#price').text()) + Number($('#delivery').text()));
+                $('#place-order').prop('disabled',false);
+            })
+
+        })
+
+                $(document).delegate('.shop-close','click',function(){
+                    $.ajax({
+                        url:'/cart',
+                        type:'DELETE', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            id:$(this).attr('id'),
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.success ===false){
+                                alert('删除失败');
+                            }else{
+                                alert('删除成功');
+                                location.reload();
+                            }
+                        }
+                    });
+                });
+
+                $(document).delegate('#place-order','click',function(){
+                    var country = $('#country').val();
+                    var address = $('#address').val();
+                    var postcode = $('#postcode').val();
+                    var name = $('#name').val();
+                    var phone = $('#phone').val();
+                    var email = $('#email').val();
+
+                    if(address === ''){
+                        alert('请填写地址');
+                        return 
+                    }
+                    if(postcode === ''){
+                        alert('请填写邮编');
+                        return 
+                    }
+                    if(country === ''){
+                        alert('请填写国家');
+                        return 
+                    }
+                    if(name === ''){
+                        alert('请填写姓名');
+                        return 
+                    }
+                    if(phone === ''){
+                        alert('请填写电话');
+                        return 
+                    }
+                    $.ajax({
+                        url:'/bill',
+                        type:'POST', //GET
+                        async:false,    //或false,是否异步
+                        data:{
+                            address:address,
+                            country:country,
+                            name:name,
+                            phone:phone,
+                            email:email,
+                            postcode:postcode,
+                            _csrf:$('#_csrf').val()
+                        },
+                        timeout:300,    //超时时间
+                        dataType:'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                        beforeSend:function(xhr){
+                            // console.log(xhr)
+                            // console.log('发送前')
+                        },
+                        success:function(data){
+                            if(data.success ===false){
+                                alert('下单失败');
+                            }else{
+                                alert('下单成功');
+                                location.href = data.surl;
+                            }
+                        }
+                    });
+                });
+	});
+
+}
+
+
+</script>
+{% endblock %}
+

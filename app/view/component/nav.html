@@ -1,0 +1,71 @@
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand navbar-logo" href="/"></a>
+            <a class="navbar-brand project {% if current =='project' %}current{% endif %}" href="/project">PROJECTS</a>
+            <a class="navbar-brand shop {% if current =='shop' %}current{% endif %}" href="/goods">SHOP</a>
+            <!--
+            <a class="navbar-brand" href="/shop">SHOP</a>
+            -->
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div id="maskline"></div>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="navbar-link {% if current =='about' %}current{% endif %}" href="/about">ABOUT</a>
+                </li>
+                <li>
+                    <a class="navbar-link {% if current =='news' %}current{% endif %}" href="/news">NEWS</a>
+                </li>
+                <li>
+                    <a class="navbar-link {% if current =='press' %}current{% endif %}" href="/press">PRESS</a>
+                </li>
+                <li>
+                    <a class="navbar-link {% if current =='team' %}current{% endif %}" href="/team">TEAM</a>
+                </li>
+                <li>
+                    <a class="navbar-link {% if current =='job' %}current{% endif %}" href="/job">JOB</a>
+                </li>
+                <li>
+                    <a class="navbar-link navbar-link-last {% if current =='contact' %}current{% endif %}" href="/contact">CONTACT</a>
+                </li>
+                <li>
+                    <a class="navbar-icon car" href="/cart"></a>
+                </li>
+                
+                <li>
+                    <a class="navbar-icon person" id="profile2">
+                    </a>
+                        <div id="login-status-box">
+                            <h3 id="welcome">HELLO: </h3>
+                            <a class="btn" href="/logout">退出</a>
+                        </div>
+                </li>
+                
+                <li>
+                    <a class="navbar-icon flag1" href=""></a>
+                </li>
+                <li>
+                    <a class="navbar-icon flag2" href=""></a>
+                </li>
+
+                <li>
+                    <a class="navbar-icon x" id="close"></a>
+                </li>
+
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>

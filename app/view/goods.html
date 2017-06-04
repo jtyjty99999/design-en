@@ -1,0 +1,119 @@
+{% extends "_layout.html" %}
+
+{% block body %}
+<!-- Main Content -->
+<div class="container">
+
+        <div class="menu_project good-menu-project">
+             <ul>
+                <li><a href="">ALL</a></li>
+                <li><a href="">WEAR</a></li>
+                <li><a href="">EAT</a></li>
+                <li><a href="">LIVE</a></li>
+                <li><a href="">TRAVEL</a></li>
+             </ul>
+         </div>
+
+    <div class="project-card good-card">
+
+        <div class="row">
+            {% for good in all %}
+            <div class="col-md-3">
+                <img data-src="/goods/info?id={{good.id}}" class="img" alt="140x140" src="{{good.m_pic}}" data-holder-rendered="true">
+                <h4>{{good.title}}</h4>
+                <h5>{{good.price}}</h5>
+            </div>
+
+            {% endfor %}
+        </div>
+
+    </div>
+    <div class="project-card good-card">
+
+        <div class="row">
+            {% for good in wear %}
+            <div class="col-md-3">
+                <img data-src="/goods/info?id={{project.id}}" class="img" alt="140x140" src="{{good.m_pic}}" data-holder-rendered="true">
+                <h4>{{good.title}}</h4>
+                <h5>{{good.price}}</h5>
+            </div>
+           
+            {% endfor %}
+        </div>
+
+    </div>
+    <div class="project-card good-card">
+
+        <div class="row">
+            {% for good in eat %}
+            <div class="col-md-3">
+                <img data-src="/goods/info?id={{good.id}}" class="img" alt="140x140" src="{{good.m_pic}}" data-holder-rendered="true">
+                <h4>{{good.title}}</h4>
+                <h5>{{good.price}}</h5>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    <div class="project-card good-card">
+
+        <div class="row">
+            {% for good in live %}
+            <div class="col-md-3">
+                <img data-src="/goods/info?id={{good.id}}" class="img" alt="140x140" src="{{good.m_pic}}" data-holder-rendered="true">
+                <h4>{{good.title}}</h4>
+                <h5>{{good.price}}</h5>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+    <div class="project-card good-card">
+
+        <div class="row">
+            {% for good in travel %}
+            <div class="col-md-3">
+                <img data-src="/goods/info?id={{good.id}}" class="img" alt="140x140" src="{{good.m_pic}}" data-holder-rendered="true">
+                <h4>{{good.title}}</h4>
+                <h5>{{good.price}}</h5>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>    
+</div>
+{% endblock %}
+
+{% block script %}
+
+<script>
+
+	$(function(){
+			var $li = $('.menu_project li');
+			var $ul = $('.project-card');
+						
+			$li.mouseover(function(){
+				var $this = $(this);
+				var $t = $this.index();
+				$li.removeClass();
+				$this.addClass('current');
+				$ul.css('display','none');
+				$ul.eq($t).css('display','block');
+			})
+
+				$li.removeClass();
+				$li.eq(0).addClass('current');
+				$ul.css('display','none');
+				$ul.eq(0).css('display','block');
+
+                $(document).delegate('.project-card img','click',function(){
+                    var url = $(this).attr('data-src');
+                    var index = $(this).parent().index();
+                    location.href = url;
+                })
+	});
+
+
+
+</script>
+{% endblock %}

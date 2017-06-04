@@ -1,0 +1,234 @@
+{% extends "_layout.html" %}
+
+{% block body %}
+<!-- Main Content -->
+<div class="container">
+    
+        <div class="row" id="team-list">
+
+            <div class="col-md-12">
+                <ul class="jobs tab team_tab" id="job_tab">
+                    <Li class="current">HANGZHOU</Li>
+                    <Li>LONDON</Li>
+                    <Li>LOS ANGELES</Li>
+                    <Li class="join-us"><a href="/job">JOIN US</a></Li>
+                    <Li>DESIGN</Li>
+                    <Li>BRAND</Li>
+                    <Li>RESEARCH</Li>
+                    <Li>BUSINESS</Li>
+
+                </ul>
+            </div>
+
+            <div class="team-list-group">
+                {% for person in hangzhou %}
+
+                <div class="col-md-2" data-id="{{person.id }}">
+                        <div class="well-item">
+                            <div class="correct"> <img src="{{person.m_pic}}" width="215" class="test2"></div>
+                            <div class="opposite mask-info">
+                                <div class="test">
+                                    <p>{{person.name }}  <br />{{person.position }}</p>			
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                {% endfor %}
+
+            </div>
+            <div class="team-list-group">
+                {% for person in london %}
+                <div class="col-md-2" data-id="{{person.id }}">
+                        <div class="well-item">
+                            <div class="correct"> <img src="{{person.m_pic}}" width="215" class="test2"></div>
+                            <div class="opposite mask-info">
+                                <div class="test">
+                                    <p>{{person.name }} <br /> {{person.position }}</p>			
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="team-list-group">
+                {% for person in losa %}
+                <div class="col-md-2" data-id="{{person.id }}">
+                        <div class="well-item">
+                            <div class="correct"> <img src="{{person.m_pic}}" width="215" class="test2"></div>
+                            <div class="opposite mask-info">
+                                <div class="test">
+                                    <p>{{person.name }} <br /> {{person.position }}</p>			
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="team-list-group">
+            </div>
+            <div class="team-list-group">
+                {% for person in design %}
+                <div class="col-md-2" data-id="{{person.id }}">
+                        <div class="well-item">
+                            <div class="correct"> <img src="{{person.m_pic}}" width="215" class="test2"></div>
+                            <div class="opposite mask-info">
+                                <div class="test">
+                                    <p>{{person.name }} <br /> {{person.position }}</p>			
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="team-list-group">
+                {% for person in brand %}
+                <div class="col-md-2" data-id="{{person.id }}">
+                        <div class="well-item">
+                            <div class="correct"> <img src="{{person.m_pic}}" width="215" class="test2"></div>
+                            <div class="opposite mask-info">
+                                <div class="test">
+                                    <p>{{person.name }}  <br />{{person.position }}</p>			
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="team-list-group">
+                {% for person in research %}
+                <div class="col-md-2" data-id="{{person.id }}">
+                        <div class="well-item">
+                            <div class="correct"> <img src="{{person.m_pic}}" width="215" class="test2"></div>
+                            <div class="opposite mask-info">
+                                <div>
+                                    <p>{{person.name }} <br /> {{person.position }}</p>		
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="team-list-group">
+                {% for person in business %}
+                <div class="col-md-2" data-id="{{person.id }}">
+                        <div class="well-item">
+                            <div class="correct"> <img src="{{person.m_pic}}" width="215" class="test2"></div>
+                            <div class="opposite mask-info">
+                                <div class="test">
+                                    <p>{{person.name }}  <br />{{person.position }}</p>		
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+
+<script type="text/javascript" src="/public/js/plugins/layer.js"></script>
+
+<script>
+
+  function showdetail(id){
+	  
+    layer.open({
+            title: false,
+            type: 1,
+            shadeClose: true,
+            closeBtn:1,
+            shade: 0.8,
+            area:['760px','460px'],
+            content: '<div class="dialog-content">测试</div>' 
+        }); 
+
+  }
+
+
+</script>
+
+<script>
+
+	$(function(){
+			var $li = $('#job_tab li').not('.join-us');
+			var $ul = $('.team-list-group');
+						
+			$li.mouseover(function(){
+				var $this = $(this);
+				var $t = $this.index();
+				$li.removeClass();
+				$this.addClass('current');
+				$ul.css('display','none');
+				$ul.eq($t).css('display','block');
+			})
+            $ul.css('display','none');
+            $ul.eq(0).css('display','block');
+
+                $(document).delegate('.team-list-group img','click',function(){
+                    var url = $(this).attr('data-src');
+                    index = $(this).parent().index();
+                    location.href = url;
+                })
+                /*
+        $(".well-item").hover(function(){
+
+            $(this).find(".correct").children().removeClass();
+            $(this).find(".opposite").children().removeClass();
+            $(this).find(".correct").children().addClass("test");
+            $(this).find(".opposite").children().addClass('test2');
+        },function(){
+            $(this).find(".correct").children().removeClass();
+            $(this).find(".opposite").children().removeClass();
+            $(this).find(".correct").children().addClass("test2");
+            $(this).find(".opposite").children().addClass('test');
+        });*/
+
+                $('.mask-info').css({
+                    top:$('.mask-info').prev().height(),
+                    height:$('.mask-info').prev().height(),
+                })
+        $(document).delegate('.col-md-2','click',function(){
+            var in_png = $(this).attr('data-big');
+            var id = $(this).attr('data-id');
+
+            $.ajax({
+            url: "/findteam?id="+id,
+            }).success(function(res) {
+
+                layer.open({
+                        title: false,
+                        type: 1,
+                        shadeClose: true,
+                        closeBtn:1,
+                        shade: 0.8,
+                        area:['80%','90%'],
+                        content: '<div id="news-content">'+res.content+'</div>',
+                        success: function(layero, i){
+                            // console.log(index);
+                            $('.control-btn').show();
+
+                        },
+                        end: function(layero, i){
+                            $('.control-btn').hide();
+                        }
+                    }); 
+
+            });
+
+
+
+        })
+
+
+
+	});
+
+
+
+
+</script>
+{% endblock %}
