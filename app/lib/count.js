@@ -9,44 +9,35 @@ module.exports = function (goods, address) {
     for (let i = 0, l = goods.length; i < l; i++) {
         whole += parseInt(goods[i].price) * goods[i].quantity;
     }
-    if (whole > 200) {
-        return 0
+    if (whole > 150) {
+        return 0;
     }
 
-    if ('安徽'.indexOf(address) !== -1) {
-        addressKey = 'anhui';
+    if ('KP'.indexOf(address) !== -1) {
+        addressKey = 'a';
     }
-    if ('江苏浙江上海'.indexOf(address) !== -1) {
-        addressKey = 'jiang';
+    if ('PH,MY,TH,SG,ID,VN'.indexOf(address) !== -1) {
+        addressKey = 'b';
     }
-    if ('河南、江西、湖北、山东、北京、天津、陕西、河北、山西、湖南'.indexOf(address) !== -1) {
-        addressKey = 'bei';
+    if ('AU,PG,JP,NZ,BN'.indexOf(address) !== -1) {
+        addressKey = 'c';
     }
-    if ('福建、重庆、辽宁、四川、贵州、广西、甘肃、宁夏、云南、海南、青海、内蒙古'.indexOf(address) !== -1) {
-        addressKey = 'nan';
+    if ('US'.indexOf(address) !== -1) {
+        addressKey = 'd';
     }
-    if ('广东、（呼伦贝尔、兴安盟）、吉林、黑龙江'.indexOf(address) !== -1) {
-        addressKey = 'hennan';
+    if ('IE,AT,BE,DK,DE,FR,FJ,FI,CA,NL,LU,MT,NO,PT,SE,CH,ES,GB,IT'.indexOf(address) !== -1) {
+        addressKey = 'e';
     }
-    if ('新疆'.indexOf(address) !== -1) {
-        addressKey = 'xinjiang';
+    if ('BD,MM,NP,LK,TR,GR,IN,GI'.indexOf(address) !== -1) {
+        addressKey = 'f';
     }
-    if ('西藏'.indexOf(address) !== -1) {
-        addressKey = 'xizang';
-    }
-    if ('香港澳门'.indexOf(address) !== -1) {
-        addressKey = 'gangao';
-    }
-    if ('台湾'.indexOf(address) !== -1) {
-        addressKey = 'tai';
-    }
-    if (!addressKey) {
-        addressKey = 'tai';
+    if ('AR,AE,OM,EG,BB,BS,PY,BH,PA,BR,GD,CU,HN,KW,PE,QA,MX,SV,TT,JM,CY,SA,IL,JO,DZ,AZ,ET,CL,AL,EE,AD,AO,AI,AW,PH'.indexOf(address) !== -1) {
+        addressKey = 'g';
     }
 
     function ceiling(x) {
-        if (x <= 1) {
-            return 1
+        if (x <= 0.5) {
+            return 0
         }
         if (Math.ceil(x) - x >= 0.5) {
             x = Math.ceil(x) - 0.5;
@@ -57,32 +48,26 @@ module.exports = function (goods, address) {
     }
 
     let map = {
-        'jiang': function (x) {
-            return 12 + ceiling(x) * 2
+        'a': function (x) {
+            return 90 + ceiling(x) * 2*20+4
         },
-        'anhui': function (x) {
-            return 14 + ceiling(x) * 2
+        'b': function (x) {
+            return 95 + ceiling(x) * 2*22.5+4
         },
-        'bei': function (x) {
-            return 18 + ceiling(x) * 2.5
+        'c': function (x) {
+            return 105 + ceiling(x) * 2*27.5+4
         },
-        'nan': function (x) {
-            return 18 + ceiling(x) * 3
+        'd': function (x) {
+            return 120 + ceiling(x) * 2*37.5+4
         },
-        'hennan': function (x) {
-            return 18 + ceiling(x) * 4.5
+        'e': function (x) {
+            return 140 + ceiling(x) * 2*37.5+4
         },
-        'xinjiang': function (x) {
-            return 20 + ceiling(x) * 5
+        'f': function (x) {
+            return 150 + ceiling(x) * 2*40+4
         },
-        'xizang': function (x) {
-            return 26 + ceiling(x) * 10.5
-        },
-        'gangao': function (x) {
-            return 24 + ceiling(x) * 8
-        },
-        'tai': function (x) {
-            return 36 + ceiling(x) * 28
+        'g': function (x) {
+            return 167.5 + ceiling(x) * 2*50+4
         }
     }
 
