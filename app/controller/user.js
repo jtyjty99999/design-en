@@ -45,13 +45,20 @@ exports.update = function* () {
   const email = this.request.body.email;
   const nick = this.request.body.nick;
   const pic = this.request.body.pic;
-  let res = yield this.service.user.update({
-    id,
-    phone,
-    email,
-    nick,
-    pic
-  });
+  let res;
+  if (pic) {
+    res = yield this.service.user.update({
+      id,
+      pic,
+    });
+  } else {
+    res = yield this.service.user.update({
+      id,
+      phone,
+      email,
+      nick,
+    });
+  }
   this.session.user = yield this.service.user.find(this.session.user.id);
   this.body = {
     success: true,
