@@ -47,27 +47,29 @@ module.exports = function (goods, address) {
         return x;
     }
 
+    let ps = 6.8
+
     let map = {
         'a': function (x) {
-            return 90 + ceiling(x) * 2*20+4
+            return 90/ps + ceiling(x) * 2*20/ps+4
         },
         'b': function (x) {
-            return 95 + ceiling(x) * 2*22.5+4
+            return 95/ps + ceiling(x) * 2*22.5/ps+4
         },
         'c': function (x) {
-            return 105 + ceiling(x) * 2*27.5+4
+            return 105/ps + ceiling(x) * 2*27.5/ps+4
         },
         'd': function (x) {
-            return 120 + ceiling(x) * 2*37.5+4
+            return 120/ps + ceiling(x) * 2*37.5/ps+4
         },
         'e': function (x) {
-            return 140 + ceiling(x) * 2*37.5+4
+            return 140/ps + ceiling(x) * 2*37.5/ps+4
         },
         'f': function (x) {
-            return 150 + ceiling(x) * 2*40+4
+            return 150/ps + ceiling(x) * 2*40/ps+4
         },
         'g': function (x) {
-            return 167.5 + ceiling(x) * 2*50+4
+            return 167.5/ps + ceiling(x) * 2*50/ps+4
         }
     }
 

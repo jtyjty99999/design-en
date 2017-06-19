@@ -31,6 +31,7 @@ exports.add = function* () {
   const method = this.request.body.method;
   let type = this.request.body.type;
   const id = this.request.body.id;
+  const description = this.request.body.description;
   if(typeof type === 'object'){
     type = type.join(',');
   }
@@ -39,13 +40,15 @@ exports.add = function* () {
       id,
       title,
       content,
-      type
+      type,
+      description
     });
   }else{
     yield this.service.job.insert({
         title,
         content,
-        type
+        type,
+        description
     });
 
   }
@@ -60,6 +63,7 @@ exports.update = function* () {
   const id = this.request.body.id;
   const title = this.request.body.title;
   const content = this.request.body.content;
+  const description = this.request.body.description;
   let type = this.request.body.type;
   if(typeof type === 'object'){
     type = type.join(',');
@@ -68,7 +72,8 @@ exports.update = function* () {
     id,
     title,
     content,
-    type
+    type,
+    description
   });
 
   this.redirect(`/manager`);
