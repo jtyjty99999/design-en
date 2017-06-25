@@ -6,7 +6,7 @@
 
 const moment = require('moment');
 const marked = require('marked');
-const AlipayNotify = require('../lib/alipay');
+//const AlipayNotify = require('../lib/alipay');
 const counter = require('../lib/count');
 
 function pad(num, n) {
@@ -18,166 +18,154 @@ function pad(num, n) {
   return num;
 }
 
-function generatorAlipayUrl(config,id,total){
-  let AlipayConfig = config;
+function generatorYijiUrl(goods, order, id,total,YijiConfig){
+  console.log(goods);
+    //https://apidoc.yiji.com/website/api_detail.html?sericeNo=espOrderPay_1.0&id=8a949fbe564a569d0156e36025ae00c3&sericeName=%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98&schemeName=%E6%96%B0%E5%A4%96%E5%8D%A1%E6%94%B6%E5%8D%95#espOrderPay_1.0
 
-  //请与贵网站订单系统中的唯一订单号匹配
-  var out_trade_no = pad(id,14);
-  //订单名称，显示在支付宝收银台里的“商品名称”里，显示在支付宝的交易管理的“商品名称”的列表里。
-  var subject = 'defront 购物';
-  //订单描述、订单详细、订单备注，显示在支付宝收银台里的“商品描述”里
-  var body = 'defront 购物描述';
-  //订单总金额，显示在支付宝收银台里的“应付总额”里
-  var total_fee = total;
+    //请与贵网站订单系统中的唯一订单号匹配
+    var orderNo = 'defront'+(+new Date())+ (Math.random()*100).toFixed(0);
+    var service = 'espOrderPay';
+    var partnerId = YijiConfig.partner;
+    var signType = 'MD5';
 
+    var goodsInfoList = [{
+        	'goodsNumber' : 'SKU001234',	//货号
+            'goodsName' : '货名test',	//货物名称
+            'goodsCount' : '1',	//货物数量
+            'itemSharpProductcode' : '分类',	//商品分类
+            'itemSharpUnitPrice': '1'	//商品单价
+    }];
 
-  //扩展功能参数——默认支付方式//
+   var orderDetail = {
+    'ipAddress' : '113.204.226.234',	//IP地址
+	'billtoCountry' : 'China',	//账单国家
+	'billtoState' : 'CA',	//账单州
+	'billtoCity' : 'Covina',	//账单城市
+	'billtoPostalcode' : '91723',	//账单邮编
+	'billtoEmail' : 'jimmy.lei@yiji.com',	//账单邮箱
 
-  //默认支付方式，取值见“即时到帐接口”技术文档中的请求参数列表
-  var paymethod = "";
-  //默认网银代号，代号列表见“即时到帐接口”技术文档“附录”→“银行列表”
-  var defaultbank = "";
+	'billtoFirstname' : 'James',	//接收账单人员名
+	'billtoLastname' : 'kobe',	//接收账单人员姓
+	'billtoPhonenumber' : '18602340234',	//账单电话
+	'billtoStreet' : '137 W San Bernardino Rd',	//账单街道
 
-  //扩展功能参数——防钓鱼//
+	'shiptoCity' : 'Covina',	//收货城市
+	'shiptoCountry' : 'United States',	//收货国家
+	'shiptoFirstname' : 'James',	//收货人姓
+	'shiptoLastname' : 'kobe',	//收货人名
+	'shiptoEmail' : 'jimmy.lei@yiji.com',	//收货邮箱
+	'shiptoPhonenumber' : '18602340234',	//收货电话
+	'shiptoPostalcode' : '91723',	//收货邮编
+	'shiptoState' : 'CA',	//收货州
+	'shiptoStreet' : '137 W San Bernardino Rd',	//收货街道
+	'logisticsFee' : '0.00',	//物流费
+	'logisticsMode' : 'EMS',	//物流方式
+	'cardType' : 'Visa',	//卡类型
+	'customerEmail' : 'qixin@yiji.com',	//购买者邮箱
+	'customerPhonenumber' : '13996412842',	//购买者电话
+	'merchantEmail' : 'merchent@yiji.com',	//商户邮箱
+	'merchantName' : '重庆易极付有限公司',	//商户名
+	'addressLine1' : '',	//卡地址1
+	'addressLine2' : ''	//卡地址2
+}
 
-  //防钓鱼时间戳
-  var anti_phishing_key = "";
-  //获取客户端的IP地址，建议：编写获取客户端IP地址的程序
-  var exter_invoke_ip = "";
-  //注意：
-  //1.请慎重选择是否开启防钓鱼功能
-  //2.exter_invoke_ip、anti_phishing_key一旦被设置过，那么它们就会成为必填参数
-  //3.开启防钓鱼功能后，服务器、本机电脑必须支持远程XML解析，请配置好该环境。
-  //4.建议使用POST方式请求数据
-  //示例：
-  //anti_phishing_key = AlipayService.query_timestamp();	//获取防钓鱼时间戳函数
-  //exter_invoke_ip = "202.1.1.1";
-
-  //扩展功能参数——其他///
-
-  //自定义参数，可存放任何内容（除=、&等特殊字符外），不会显示在页面上
-  var extra_common_param = "";
-  //默认买家支付宝账号
-  var buyer_email = "";
-  //商品展示地址，要用http:// 格式的完整路径，不允许加?id=123这类自定义参数
-  var show_url = "http://localhost:7001/carts";
-
-  //扩展功能参数——分润(若要使用，请按照注释要求的格式赋值)//
-
-  //提成类型，该值为固定值：10，不需要修改
-  var royalty_type = "";
-  //提成信息集
-  var royalty_parameters = "";
-  //注意：
-  //与需要结合商户网站自身情况动态获取每笔交易的各分润收款账号、各分润金额、各分润说明。最多只能设置10条
-  //各分润金额的总和须小于等于total_fee
-  //提成信息集格式为：收款方Email_1^金额1^备注1|收款方Email_2^金额2^备注2
-  //示例：
-  //royalty_type = "10"
-  //royalty_parameters	= "111@126.com^0.01^分润备注一|222@126.com^0.01^分润备注二"
-
-  //////////////////////////////////////////////////////////////////////////////////
-
-  //把请求参数打包成数组
-  var sParaTemp = [];
-  sParaTemp.push(["payment_type", "1"]);
-  sParaTemp.push(["out_trade_no", out_trade_no]);
-  sParaTemp.push(["subject", subject]);
-  sParaTemp.push(["body", body]);
-  sParaTemp.push(["total_fee", total_fee]);
-  //    sParaTemp.push(["show_url", show_url]);
-  sParaTemp.push(["paymethod", paymethod]);
-  sParaTemp.push(["defaultbank", defaultbank]);
-  sParaTemp.push(["anti_phishing_key", anti_phishing_key]);
-  sParaTemp.push(["exter_invoke_ip", exter_invoke_ip]);
-  sParaTemp.push(["extra_common_param", extra_common_param]);
-  sParaTemp.push(["buyer_email", buyer_email]);
-  sParaTemp.push(["royalty_type", royalty_type]);
-  sParaTemp.push(["royalty_parameters", royalty_parameters]);
-  /**
-   * 构造即时到帐接口
-   * @param sParaTemp 请求参数集合
-   * @return 表单提交HTML信息
-   */
-  var create_direct_pay_by_user = function (sParaTemp) {
-    //增加基本配置
-    sParaTemp.push(["service", "create_direct_pay_by_user"]);
-    sParaTemp.push(["partner", AlipayConfig.partner]);
-    sParaTemp.push(["return_url", AlipayConfig.return_url]);
-    sParaTemp.push(["notify_url", AlipayConfig.notify_url]);
-    sParaTemp.push(["seller_email", AlipayConfig.seller_email]);
-    sParaTemp.push(["_input_charset", AlipayConfig.input_charset]);
+    //把请求参数打包成数组
+    var sParaTemp = [];
+    sParaTemp.push(["orderNo", orderNo]);
+    sParaTemp.push(["service", service]);
+    sParaTemp.push(["partnerId", partnerId]);
+    sParaTemp.push(["signType", signType]);
+    // 业务接口
+    sParaTemp.push(["merchOrderNo", id]);
+    sParaTemp.push(["goodsInfoList", JSON.stringify(goodsInfoList)]);
+    sParaTemp.push(["orderDetail", JSON.stringify(orderDetail)]);
+    sParaTemp.push(["currency", 'USD']);
+    sParaTemp.push(["userId", partnerId]);
+    sParaTemp.push(["amount", total]);
+    sParaTemp.push(["webSite", 'de-front.com']);
+    sParaTemp.push(["endReturnURL", 'http://de-front.com/return']);
+    sParaTemp.push(["returnUrl", 'http://de-front.com/return']);
+    sParaTemp.push(["notifyUrl", 'http://de-front.com/return']);
+    sParaTemp.push(["memo", '备注']);
+    sParaTemp.push(["acquiringType", 'CRDIT']);
+    sParaTemp.push(["deviceFingerprintId", 'sfkjddge534314edsa']);
 
     /**
-     * 构造提交表单HTML数据
-     * @param sParaTemp 请求参数数组
-     * @param gateway 网关地址
-     * @param strMethod 提交方式。两个值可选：post、get
-     * @param strButtonName 确认按钮显示文字
-     * @return 提交表单HTML文本
+     * 构造即时到帐接口
+     * @param sParaTemp 请求参数集合
+     * @return 表单提交HTML信息
      */
-    var buildURL = function (sParaTemp) {
-      /**
-       * 生成要请求给支付宝的参数数组
-       * @param sParaTemp 请求前的参数数组
-       * @return 要请求的参数数组
-       */
-      var buildRequestPara = function (sParaTemp) {
-        var sPara = [];
-        //除去数组中的空值和签名参数
-        for (var i1 = 0; i1 < sParaTemp.length; i1++) {
-          var value = sParaTemp[i1];
-          if (value[1] == null || value[1] == "" || value[0] == "sign" ||
-            value[0] == "sign_type") {
-            continue;
-          }
-          sPara.push(value);
-        }
-        sPara.sort();
-        //生成签名结果
-        var prestr = "";
-        //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
-        for (var i2 = 0; i2 < sPara.length; i2++) {
-          var obj = sPara[i2];
-          if (i2 == sPara.length - 1) {
-            prestr = prestr + obj[0] + "=" + obj[1];
-          } else {
-            prestr = prestr + obj[0] + "=" + obj[1] + "&";
-          }
+    var create_direct_pay_by_user = function (sParaTemp) {
 
-        }
-        prestr = prestr + AlipayConfig.key; //把拼接后的字符串再与安全校验码直接连接起来
-        var crypto = require('crypto');
-        var mysign = crypto.createHash('md5').update(prestr, AlipayConfig.input_charset).digest("hex");
-        //签名结果与签名方式加入请求提交参数组中
-        sPara.push(["sign", mysign]);
-        sPara.push(["sign_type", AlipayConfig.sign_type]);
+        /**
+         * 构造提交表单HTML数据
+         * @param sParaTemp 请求参数数组
+         * @param gateway 网关地址
+         * @param strMethod 提交方式。两个值可选：post、get
+         * @param strButtonName 确认按钮显示文字
+         * @return 提交表单HTML文本
+         */
+        var buildURL= function (sParaTemp) {
+            /**
+             * 生成要请求给支付宝的参数数组
+             * @param sParaTemp 请求前的参数数组
+             * @return 要请求的参数数组
+             */
+            var buildRequestPara = function (sParaTemp) {
+                var sPara = [];
+                //除去数组中的空值和签名参数
+                for (var i1 = 0; i1 < sParaTemp.length; i1++) {
+                    var value = sParaTemp[i1];
+                    if (value[1] == null || value[1] == "" || value[0] == "sign"
+                        || value[0] == "sign_type") {
+                        continue;
+                    }
+                    sPara.push(value);
+                }
+                sPara.sort();
+                //生成签名结果
+                var prestr = "";
+                //把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+                for (var i2 = 0; i2 < sPara.length; i2++) {
+                    var obj = sPara[i2];
+                    if (i2 == sPara.length - 1) {
+                        prestr = prestr + obj[0] + "=" + obj[1];
+                    } else {
+                        prestr = prestr + obj[0] + "=" + obj[1] + "&";
+                    }
 
-        return sPara;
-      };
-      //待请求参数数组
-      var sPara = buildRequestPara(sParaTemp);
-      var path = AlipayConfig.ALIPAY_PATH;
+                }
+                prestr = prestr + YijiConfig.key; //把拼接后的字符串再与安全校验码直接连接起来
+                var crypto = require('crypto');
+                var mysign = crypto.createHash('md5').update(prestr, 'utf-8').digest("hex");
+                //签名结果与签名方式加入请求提交参数组中
+                sPara.push(["sign", mysign]);
+
+                return sPara;
+            };
+            //待请求参数数组
+            var sPara = buildRequestPara(sParaTemp);
+            var path=YijiConfig.url;
 
 
-      for (var i3 = 0; i3 < sPara.length; i3++) {
-        var obj = sPara[i3];
-        var name = obj[0];
-        var value = encodeURIComponent(obj[1]);
-        if (i3 < (sPara.length - 1)) {
-          path = path + name + "=" + value + "&";
-        } else {
-          path = path + name + "=" + value;
-        }
-      }
-      return path.toString();
+            for (var i3 = 0; i3 < sPara.length; i3++) {
+                var obj = sPara[i3];
+                var name = obj[0];
+                var value = encodeURIComponent(obj[1]);
+                if(i3<(sPara.length-1)){
+                    path=path+name+"="+value+"&";
+                }else{
+                    path=path+name+"="+value;
+                }
+            }
+            return path.toString();
+        };
+        return buildURL(sParaTemp);
     };
-
-    return buildURL(sParaTemp);
-  };
-  //构造函数，生成请求URL
-  var sURL = create_direct_pay_by_user(sParaTemp);
-  return sURL;
+    
+    //构造函数，生成请求URL
+    var sURL = create_direct_pay_by_user(sParaTemp);
+    return sURL;
 }
 
 // 新增订单
@@ -218,21 +206,15 @@ exports.add = function* () {
     status: 0 //创建订单
   });
   let bill_id = bill.insertId;
-  //向支付宝网关发出请求
-  //    requestUrl(AlipayConfig.ALIPAY_HOST,show_url,function(data){
-  //        console.log(data);
-  //    });
-  let AlipayConfig = this.app.config.alipay;
 
   // 清除购物车 
-
   yield this.service.cart.remove({
     user_id: this.session.user.id
   });
 
   this.body = {
     success: true,
-    surl: "https://" + AlipayConfig.ALIPAY_HOST + "/" + generatorAlipayUrl(this.app.config.alipay, bill_id, total)
+    surl: generatorYijiUrl(goods, bill, bill_id, total, this.app.config.yiji)
   }
 
 };
@@ -243,7 +225,7 @@ exports.pay = function *(){
   let AlipayConfig = this.app.config.alipay;
   this.body = {
     success: true,
-    surl: "https://" + AlipayConfig.ALIPAY_HOST + "/" + generatorAlipayUrl(this.app.config.alipay, bill_id, bill.total)
+    surl: generatorYijiUrl(JSON.parse(bill.info), bill, bill_id, bill.total, this.app.config.yiji)
   } 
 }
 
