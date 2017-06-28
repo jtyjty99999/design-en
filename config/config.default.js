@@ -17,7 +17,7 @@ exports.yiji = {
 // 密钥
     key:"21a121c1ca7c146581292c28892971f8",
 // 网管
-    url:"https://api.yiji.com/gateway.html"
+    url:"https://api.yiji.com/gateway.html?"
 };
 
 exports.security = {
