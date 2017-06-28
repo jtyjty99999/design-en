@@ -18,6 +18,17 @@ function pad(num, n) {
   return num;
 }
 
+function addPreZero(num){
+ var t = (num+'').length,
+  s = '';
+ 
+ for(var i=0; i<18-t; i++){
+  s += '0';
+ }
+ 
+ return s+num;
+}
+
 function generatorYijiUrl(goods, order, id, total, YijiConfig) {
   //https://apidoc.yiji.com/website/api_detail.html?sericeNo=espOrderPay_1.0&id=8a949fbe564a569d0156e36025ae00c3&sericeName=%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98&schemeName=%E6%96%B0%E5%A4%96%E5%8D%A1%E6%94%B6%E5%8D%95#espOrderPay_1.0
 
@@ -79,7 +90,7 @@ function generatorYijiUrl(goods, order, id, total, YijiConfig) {
   sParaTemp.push(["partnerId", partnerId]);
   sParaTemp.push(["signType", signType]);
   // 业务接口
-  sParaTemp.push(["merchOrderNo", id]);
+  sParaTemp.push(["merchOrderNo", addPreZero(id)]);
   sParaTemp.push(["goodsInfoList", JSON.stringify(goodsInfoList)]);
   sParaTemp.push(["orderDetail", JSON.stringify(orderDetail)]);
   sParaTemp.push(["currency", 'USD']);
@@ -87,8 +98,8 @@ function generatorYijiUrl(goods, order, id, total, YijiConfig) {
   sParaTemp.push(["amount", total]);
   sParaTemp.push(["webSite", 'de-front.com']);
   sParaTemp.push(["endReturnURL", 'http://en.de-front.com/profile']);
-  sParaTemp.push(["returnUrl", 'http://en.de-front.com/payreturn']);
-  sParaTemp.push(["notifyUrl", 'http://en.de-front.com/payreturn']);
+  sParaTemp.push(["returnUrl", 'http://en.de-front.com/api/payreturn']);
+  sParaTemp.push(["notifyUrl", 'http://en.de-front.com/api/paynotify']);
   sParaTemp.push(["memo", '备注']);
   sParaTemp.push(["acquiringType", 'CRDIT']);
   sParaTemp.push(["deviceFingerprintId", 'sfkjddge534314edsa']);
@@ -168,6 +179,7 @@ function generatorYijiUrl(goods, order, id, total, YijiConfig) {
 
   //构造函数，生成请求URL
   var sURL = create_direct_pay_by_user(sParaTemp);
+  console.log(sURL);
   return sURL;
 }
 
@@ -314,6 +326,7 @@ exports.deleteBill = function* () {
 
 
 exports.paynotify = function* () {
+  /*
   var params = this.query;
   var trade_no = params.trade_no; //支付宝交易号
   var order_no = params.out_trade_no; //获取订单号
@@ -342,7 +355,8 @@ exports.paynotify = function* () {
       return
     }
 
-  });
+  });*/
+  this.body = 'success';
 };
 exports.payreturn = function* () {
   this.body = 'success';

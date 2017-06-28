@@ -17,8 +17,8 @@ module.exports = app => {
   app.post('/cart', app.controller.cart.add);
   app.delete('/cart', app.controller.cart.deleteCarts);
 
-  app.get('/paynotify', install, app.controller.bill.paynotify);
-  app.get('/payreturn', install, app.controller.bill.payreturn);
+  app.get('/api/paynotify', install, app.controller.bill.paynotify);
+  app.get('/api/payreturn', install, app.controller.bill.payreturn);
   // bill
   app.get('/bill/change', app.controller.bill.change);
   app.get('/bill/send', app.controller.bill.send);

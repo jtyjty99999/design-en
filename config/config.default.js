@@ -13,11 +13,17 @@ exports.mysql = {
 
 exports.yiji = {
 // 商户id
-    partner:"20160825020000752433",
+    partner:"20170413020014185029",
 // 密钥
-    key:"05a29a66557ad2f3634534a940d3577c",
+    key:"21a121c1ca7c146581292c28892971f8",
 // 网管
-    url:"https://openapi.yijifu.net/gateway.html?"
+    url:"https://api.yiji.com/gateway.html"
+};
+
+exports.security = {
+  csrf: {
+    ignore: '/api',
+  },
 };
 
 exports.oss = {
