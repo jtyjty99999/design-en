@@ -39,16 +39,19 @@ exports.video = function* () {
 };
 
 exports.home = function* () {
-
-  const pageNum = +this.query.pageNum || 1;
-  const pageSize = +this.query.pageSize || 100;
-
-  const result = yield {
-    projects: this.service.project.list(pageNum, pageSize),
+  
+    const pageNum = +this.query.pageNum || 1;
+    const pageSize = +this.query.pageSize || 100;
+    let site = yield this.service.site.getSite();
+    site = site[0];
+    const result = {
+      main_pics: site.main_pics ? site.main_pics.split(',') : [null,null],
+      main_links: site.main_links ? site.main_links.split(',') : [null,null]
+    };
+    console.log(result);
+    yield this.render('home.html', result);
   };
-  result.projects = result.projects.slice(0,4);
-  yield this.render('home.html', result);
-};
+  
 
 exports.about = function* () {
   const result = {

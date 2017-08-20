@@ -15,7 +15,7 @@ module.exports = app => {
 
     // 获取某一类的job
     * search(type) {
-      const article = yield app.mysql.query('select  id,title,type, content from design_job where type like \'%' + type + '%\' and deleted = 0 order by timestamp desc', [ type ]);
+      const article = yield app.mysql.query('select  id,title,type, content,description from design_job where type like \'%' + type + '%\' and deleted = 0 order by timestamp desc', [ type ]);
       return article;
     }
 
