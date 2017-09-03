@@ -608,6 +608,9 @@ job list
     .tab_content ul { height:auto; display:none}
 
     .list_jobs{ width:80%; border:5px solid #cecac1; margin:0 auto; height:auto; margin-bottom:30px; padding-bottom:10px}
+    .list_jobs p{
+        margin:0
+    }
     .more{ display:block; width:120px; line-height:30px; text-align:center; background-color:#000;color:#fff}
     
     .more:hover{

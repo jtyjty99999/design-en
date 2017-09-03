@@ -29,13 +29,15 @@ exports.update = function* () {
   const site = yield this.service.site.getSite();
   const main_pics = this.request.body.main_pics;
   const main_links = this.request.body.main_links;
+  const main_texts = this.request.body.main_texts;
 
   yield this.service.site.update({
     retailer,
     cooperation,
     id:site[0].id,
     main_links,
-    main_pics
+    main_pics,
+    main_texts
   });
 
   this.redirect(`/manager`);

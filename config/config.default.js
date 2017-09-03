@@ -53,6 +53,6 @@ exports.onerror = {
 };
 
 exports.bodyParser = {
-    "formLimit": "2000kb",
-    "jsonLimit": "2000kb",
+    "formLimit": "4000kb",
+    "jsonLimit": "4000kb",
 }
