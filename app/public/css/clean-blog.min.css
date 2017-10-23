@@ -329,7 +329,10 @@ margin-right: 45px;
 }
 .press-pic-big{
     height: 100%;
-    width:auto
+    width:auto;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
 } 
 
 .press-pic-list img{
