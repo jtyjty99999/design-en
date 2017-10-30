@@ -6,9 +6,9 @@
 
         <div class="menu_project">
              <ul>
-                <li><a href="">资料</a></li>
-                <li class="manage-tab"><a href="">管理</a></li>
-                <li><a href="">订单</a></li>
+                <li><a href="">PROFILE</a></li>
+                <li class="manage-tab"><a href="">ADDRESS</a></li>
+                <li><a href="">ORDER</a></li>
              </ul>
          </div>
 
@@ -135,20 +135,20 @@
         <div class="row profile-box">
             <div class="col-md-3 profile-head-box">
                 <img data-src="/project/info?id={{project.id}}" class="profile-head" alt="140x140" src="{{user.pic}}" data-holder-rendered="true">
-                <div class="profile-action">修改头像</div>
+                <div class="profile-action">PROFILE PICTURE</div>
             </div>
             <div class="col-md-8 profile-info-box">
-                <h4 class="profile-title">资料信息</h4>
+                <h4 class="profile-title">YOUR PROFILE</h4>
                 <div class="row profile-input">
                     <div class="col-xs-5">
                         <div class="input-group">
-                            <div class="input-group-addon">昵称</div>
+                            <div class="input-group-addon">NAME</div>
                             <input type="text" class="form-control" id="nick" value="{{user.nick}}" placeholder="" autocomplete="off">
                         </div>
                     </div>
                     <div class="col-xs-7">
                         <div class="input-group">
-                            <div class="input-group-addon">手机</div>
+                            <div class="input-group-addon">PHONE</div>
                             <input type="text" class="form-control" id="phone" value="{{user.phone}}" placeholder="" autocomplete="off">
                         </div>
                     </div>
@@ -156,7 +156,7 @@
                 <div class="row profile-input">
                     <div class="col-xs-12">
                         <div class="input-group">
-                            <div class="input-group-addon">邮箱</div>
+                            <div class="input-group-addon">EMAIL</div>
                             <input type="email" class="form-control" id="email" value="{{user.email}}" autocomplete="off">
                         </div>
                     </div>
@@ -164,10 +164,10 @@
                 <div class="row profile-input">
                     <input type="hidden" value="{{ ctx.csrf | safe }}" id="_csrf">
                     <div class="col-xs-3">
-                        <button id="confirm-modify" type="button" class="btn btn-default">确认修改</button>
+                        <button id="confirm-modify" type="button" class="btn btn-default">SUBMIT</button>
                     </div>
                     <div class="col-xs-3">
-                        <div class="profile-action">修改密码 &gt&gt</div>
+                        <div class="profile-action">CHANGE PASSWORD &gt&gt</div>
                     </div>
 
                 </div>
@@ -179,7 +179,7 @@
 
         <div class="row profile-box profile-manage-box">
             <div class="col-md-3 profile-manage-title-box">
-                <h4 class="profile-manage-title">常用收货信息</h4>
+                <h4 class="profile-manage-title">SHIPPING ADDRESS</h4>
             </div>
             <div class="col-md-8">
                 <ul class="address-list">
@@ -193,12 +193,12 @@
 
   
                                 <div class="address-list-detail">{{address.country}}{{address.address}}</div>
-                                <div class="address-modify">编辑{{user.default_address_id}}</div>
-                                <div class="address-delete">删除</div>
+                                <div class="address-modify" data-id="{{user.default_address_id}}">EDIT</div>
+                                <div class="address-delete">DELETE</div>
                             </li>
                         {% endfor %}
                 </ul>
-                {% if addressnotfull %}<div class="profile-action" id="address-add">添加地址 &gt&gt</div> {% endif %}
+                {% if addressnotfull %}<div class="profile-action" id="address-add">ADD ADDRESS &gt&gt</div> {% endif %}
             </div>
         </div>
 
@@ -507,28 +507,28 @@
 
             </div>
             <div class="col-md-3">
-                 <p class="bill-info-title">金额</p>
+                 <p class="bill-info-title">PRICE</p>
                 <div class="bill-status-text">
                     <div class="bill-price">{{bill.total}}</div>
                     <hr>
-                    <div class="bill-status">{% if bill.status===0 %}未支付 <button class="pay btn" data-billid="{{bill.id}}">去支付</button>{% endif %} 
-                    {% if bill.status ===1 %}已支付，等待发货{% endif %}
-                    {% if bill.status ===2 %}<span class="bill-shipping-code">已发货，快递单号： {{bill.shipping_code}} <button class="confirm-package btn" data-billid="{{bill.id}}">确认收货</button></span>{% endif %} </div>
+                    <div class="bill-status">{% if bill.status===0 %}not paid <button class="pay btn" data-billid="{{bill.id}}">GO TO PAY</button>{% endif %} 
+                    {% if bill.status ===1 %}Paid, Being processed{% endif %}
+                    {% if bill.status ===2 %}<span class="bill-shipping-code">Shipped, Tracking number:： {{bill.shipping_code}} <button class="confirm-package btn" data-billid="{{bill.id}}">CONFIRM</button></span>{% endif %} </div>
                     {% if bill.status ===3 %}<span class="bill-shipping-code">已收货，快递单号： {{bill.shipping_code}} </span>{% endif %} 
                     </div>
             </div>
             <div class="col-md-5">
-                 <p class="bill-info-title">交易状态</p>
+                 <p class="bill-info-title">STATUS</p>
                 <ul class="bill-status-box">
-                    <li class="status-current bill-status-li"><span class="bill-status-table-text">下单</span></li>
+                    <li class="status-current bill-status-li"><span class="bill-status-table-text">ORDERED</span></li>
                     <li class="bill-sep"></li>
-                    <li class="{% if bill.status >0 %}status-current{% endif %}  bill-status-li"><span class="bill-status-table-text">支付</span></li>
+                    <li class="{% if bill.status >0 %}status-current{% endif %}  bill-status-li"><span class="bill-status-table-text">PAID</span></li>
                     <li class="bill-sep"></li>
-                    <li class="{% if bill.status >1 %}status-current{% endif %} bill-status-li"><span class="bill-status-table-text">发货</span> </li>
+                    <li class="{% if bill.status >1 %}status-current{% endif %} bill-status-li"><span class="bill-status-table-text">DELIVERED</span> </li>
                     <li class="bill-sep"></li>
-                    <li class="{% if bill.status >2 %}status-current{% endif %} bill-status-li"><span class="bill-status-table-text">收货</span></li>
+                    <li class="{% if bill.status >2 %}status-current{% endif %} bill-status-li"><span class="bill-status-table-text">RECEIVED</span></li>
                     <li class="bill-sep"></li>
-                    <li class="{% if bill.status >2 %}status-current{% endif %} bill-status-li"><span class="bill-status-table-text">完成</span></li>
+                    <li class="{% if bill.status >2 %}status-current{% endif %} bill-status-li"><span class="bill-status-table-text">SUCCEED</span></li>
                 </ul>
             </div>
         </div>
@@ -772,9 +772,9 @@
 
 
                 var uploadContent = `<div class="profile-head-box">
-                    <h5>点击修改头像</h5>
+                    <h5>CLICK AND CHOSE A PITCTURE</h5>
                     <div class="profile-head-box-inner"><img class="profile-head" alt="140x140" src="{{user.pic}}" data-holder-rendered="true"></div>
-                <div class="profile-action-confirm" id="change-head">确认修改</div>
+                <div class="profile-action-confirm" id="change-head">SUBMIT</div>
             </div>`
 
                 $(document).delegate('.profile-action','click',function(){
@@ -831,11 +831,11 @@
                 });
 
                 var addressContent = `<div id="address-box">
-                                <h3 class="profile-title">收件地址</h3>
+                                <h3 class="profile-title">SHIPPING ADDRESS</h3>
                                 <div class="row profile-input">
                                     <div class="col-xs-5">
                                         <div class="input-group">
-                                            <div class="input-group-addon">地区</div>
+                                            <div class="input-group-addon">COUNTRY</div>
                                             <select name="type" class="form-control" id="country" data-address="{{address.country}}">
                                                         <option value="KP">Korea, North</option>
                                                         <option value="PH">Philippines</option>
@@ -919,28 +919,28 @@
                                 <div class="row profile-input">
                                     <div class="col-xs-7">
                                         <div class="input-group">
-                                            <div class="input-group-addon">详细地址</div>
+                                            <div class="input-group-addon">ADDRESS</div>
                                             <input type="text" class="form-control" id="address" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-xs-5">
                                         <div class="input-group">
-                                            <div class="input-group-addon">邮编</div>
+                                            <div class="input-group-addon">POST CODE</div>
                                             <input type="text" class="form-control" id="postcode" placeholder="">
                                         </div>
                                     </div>
                                 </div>
-                                <h3 class="profile-title">收件人信息</h3>
+                                <h3 class="profile-title">CUSTOMER INFORMATION</h3>
                                 <div class="row profile-input">
                                     <div class="col-xs-5">
                                         <div class="input-group">
-                                            <div class="input-group-addon">姓名</div>
+                                            <div class="input-group-addon">NAME</div>
                                             <input type="text" class="form-control" id="contact_name" placeholder="">
                                         </div>
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="input-group">
-                                            <div class="input-group-addon">联系人电话</div>
+                                            <div class="input-group-addon">PHONE</div>
                                             <input type="text" class="form-control" id="contact_phone" placeholder="">
                                         </div>
                                     </div>
@@ -948,14 +948,14 @@
                                 <div class="row profile-input">
                                     <div class="col-xs-12">
                                         <div class="input-group">
-                                            <div class="input-group-addon">邮箱</div>
+                                            <div class="input-group-addon">EMAIL</div>
                                             <input type="text" class="form-control" id="contact_email" placeholder="">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row profile-input">
                                     <div class="col-xs-12">
-                                        <button class="btn" id="confirm-address">确认</button>
+                                        <button class="btn" id="confirm-address">SUBMIT</button>
                                     </div>
                                 </div>
                         </div>`
