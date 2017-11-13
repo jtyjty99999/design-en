@@ -12,6 +12,22 @@ exports.islogin = function* () {
   };
 }
 
+exports.changePassword = function *(){
+  const id = this.session.user.id
+  const passwordFrom = this.request.body.passwordFrom;
+  const passwordTo = this.request.body.passwordTo;
+
+  let res = yield this.service.user.update({
+      id,
+      password:passwordTo,
+    });
+
+  this.session.user = yield this.service.user.find(this.session.user.id);
+  this.body = {
+    success: true,
+    msg: ""
+  };
+}
 exports.login = function* () {
   this.validate(loginRule);
   const name = this.request.body.name;
@@ -103,6 +119,16 @@ exports.registry = function* () {
 
   const name = this.request.body.name;
   const password = this.request.body.password;
+
+  let user = yield this.service.user.findByName(name);
+
+  if(user){
+    this.body = {
+      success: false,
+      msg: "exist"
+    }; 
+    return
+  }
   let res = yield this.service.user.insert(name, password);
 
   //错误处理
