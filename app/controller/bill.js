@@ -29,6 +29,19 @@ function addPreZero(num){
  return s+num;
 }
 
+
+function leftpad(str, len, ch) {
+  if(!str){
+    str = '';
+  }
+  if(str.length>len){
+    return str
+  }
+  if (!ch && ch !== 0) ch = ' ';
+  var len = len - str.length;
+  return Array(len).join(ch) + str;
+}
+
 function generatorYijiUrl(goods, order, id, total, YijiConfig) {
   //https://apidoc.yiji.com/website/api_detail.html?sericeNo=espOrderPay_1.0&id=8a949fbe564a569d0156e36025ae00c3&sericeName=%E8%AE%A2%E5%8D%95%E6%94%AF%E4%BB%98&schemeName=%E6%96%B0%E5%A4%96%E5%8D%A1%E6%94%B6%E5%8D%95#espOrderPay_1.0
 
@@ -82,7 +95,9 @@ function generatorYijiUrl(goods, order, id, total, YijiConfig) {
     'addressLine1': '', //卡地址1
     'addressLine2': '' //卡地址2
   }
-
+  orderDetail.billtoPhonenumber = leftpad(orderDetail.billtoPhonenumber, 8, '0');
+  orderDetail.billtoPostalcode = leftpad(orderDetail.billtoPostalcode, 6, '0');
+  
   //把请求参数打包成数组
   var sParaTemp = [];
   sParaTemp.push(["orderNo", orderNo]);
