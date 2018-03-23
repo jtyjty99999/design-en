@@ -411,23 +411,23 @@ $("#country").val($("#country").attr('data-address'));
                     var email = $('#email').val();
 
                     if(address === ''){
-                        alert('请填写地址');
+                        alert('Please fill in the address');
                         return 
                     }
                     if(postcode === ''){
-                        alert('请填写邮编');
+                        alert('Please fill in the zipcode');
                         return 
                     }
                     if(country === ''){
-                        alert('请填写国家');
+                        alert('Please fill in the country');
                         return 
                     }
                     if(name === ''){
-                        alert('请填写姓名');
+                        alert('Please fill in the name');
                         return 
                     }
                     if(phone === ''){
-                        alert('请填写电话');
+                        alert('Please fill in the phone');
                         return 
                     }
                     $.ajax({
@@ -451,9 +451,9 @@ $("#country").val($("#country").attr('data-address'));
                         },
                         success:function(data){
                             if(data.success ===false){
-                                alert('下单失败');
+                                alert('ordered failed');
                             }else{
-                                alert('下单成功');
+                                alert('successfully ordered');
                                 location.href = data.surl;
                             }
                         }

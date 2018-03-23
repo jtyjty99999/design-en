@@ -369,11 +369,11 @@ font-size: 18px;
                         },
                         success:function(data){
                             if(data.msg ==='noexist'){
-                                alert('账户不存在');
+                                alert('Account do not exist');
                             }else if(data.msg ==='wrong'){
-                                alert('账户和密码不匹配');
+                                alert('Account name and password do not match');
                             }else{
-                                alert('登录成功！');
+                                alert('Logged in！');
                                 location.href ='/profile';
                             }
                         }
@@ -401,9 +401,9 @@ font-size: 18px;
                         },
                         success:function(data){
                             if(data.msg ==='exist'){
-                                alert('账户已经存在');
+                                alert('Account already exists');
                             }else{
-                                alert('注册成功！');
+                                alert('registration success');
                                 location.href ='/profile';
                             }
                         }

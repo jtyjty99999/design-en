@@ -821,9 +821,9 @@
                         },
                         success:function(data){
                             if(data.msg ==='wrong'){
-                                alert('修改失败');
+                                alert('profile update failed');
                             }else{
-                                alert('修改成功');
+                                alert('profile update success');
                                 location.reload();
                             }
                         }
@@ -998,9 +998,9 @@
                         },
                         success:function(data){
                             if(data.msg ==='wrong'){
-                                alert('修改失败');
+                                alert('profile updated failed');
                             }else{
-                                alert('修改成功');
+                                alert('profile updated');
                             }
                         }
                     });
@@ -1025,9 +1025,9 @@
                         },
                         success:function(data){
                             if(data.success ===false){
-                                alert('设置为默认地址失败');
+                                alert('Default address saved failed');
                             }else{
-                                 alert('设置为默认地址成功');
+                                 alert('Default address saved');
                                  $('.address-list .address-list-status').each(function(d, i){
                                     $(i).removeClass('status-current');
                                  })
@@ -1047,8 +1047,8 @@
                         msgWrong= "添加失败";
                     }else if(type==='modify'){
                         method = 'PUT';
-                        msgRight="修改成功";
-                        msgWrong= "修改失败";
+                        msgRight="Address updated";
+                        msgWrong= "Address updated failed";
                     }else{
                         return;
                     }
@@ -1127,9 +1127,9 @@
                         },
                         success:function(data){
                             if(data.success ===false){
-                                alert('删除失败');
+                                alert('Item deleted failed');
                             }else{
-                                 alert('删除成功');
+                                 alert('Item deleted');
                                  location.reload();
                             }
                         }
@@ -1316,7 +1316,7 @@
                                     if(data.success ==='false'){
                                         alert(data.msg);
                                     }else{
-                                        alert('修改成功!');
+                                        alert('password updated!');
                                     }
                                     location.reload();
                                 }

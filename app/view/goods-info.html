@@ -50,6 +50,7 @@
                 <div class="col-md-6">QUANTITY</div>
                 <div class="col-md-6"><input  style="width:100px;" data_max="{{good.whole}}" value="1" data_step="1"  data_digit="0" id="quantity"/></div>
             </div>
+            <hr>
             <div class="row good-input" id="add-cart-box">
                 <input type="hidden" value="{{ ctx.csrf | safe }}" id="_csrf">
                 <button id="add-to-cart" data-good="{{good.id}}">ADD TO CART</button>
@@ -143,11 +144,11 @@ function isLogin(cb){
                     var quantity = $('#quantity').val();
                     var material = $('.color-list li.select-current').attr('data-color');
                     if(quantity === '0'){
-                        alert('请选择数量');
+                        alert('Please choose the quantity');
                         return
                     }
                     if(material === undefined){
-                        alert('请选择颜色');
+                        alert('Please choose the color');
                         return 
                     }
                     $.ajax({
@@ -168,9 +169,9 @@ function isLogin(cb){
                         },
                         success:function(data){
                             if(data.success ===false){
-                                alert('添加失败,请登录');
+                                alert('Added failed ,please login');
                             }else{
-                                alert('添加成功');
+                                alert('Added successfully');
                             }
                         }
                     });
